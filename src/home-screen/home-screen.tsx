@@ -11,6 +11,8 @@ interface HomeScreenProps {
 export const HomeScreen: React.FC<HomeScreenProps> = ({ appState }) => {
   return (
     <div className="home-screen">
+      <h2 className="bp4-heading">Home</h2>
+
       <div
         className="menu-item bp4-text-large"
         onClick={() => appState.setCurrentScreen(AppPage.PLAY)}
@@ -19,13 +21,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ appState }) => {
       </div>
       <div
         className="menu-item bp4-text-large"
-        onClick={() => appState.setCurrentScreen(AppPage.PLAY)}
+        onClick={() => appState.setCurrentScreen(AppPage.ROSTER)}
       >
         Roster
       </div>
       <div
         className="menu-item bp4-text-large"
-        onClick={() => appState.setCurrentScreen(AppPage.PLAY)}
+        onClick={() => appState.setCurrentScreen(AppPage.TEAM_BUILDER)}
       >
         Team builder
       </div>

@@ -13,6 +13,8 @@ export const PlayScreen: React.FC<PlayScreenProps> = observer(
   ({ appState }) => {
     return (
       <div className="play-screen">
+        <h2 className="bp4-heading">Play</h2>
+
         <div
           className="menu-item bp4-text-large"
           onClick={() => appState.setCurrentScreen(AppPage.HOME)}

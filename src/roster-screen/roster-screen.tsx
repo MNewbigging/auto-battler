@@ -13,6 +13,8 @@ export const RosterScreen: React.FC<RosterScreenProps> = observer(
   ({ appState }) => {
     return (
       <div className="roster-screen">
+        <h2 className="bp4-heading">Roster</h2>
+
         <div
           className="menu-item bp4-text-large"
           onClick={() => appState.setCurrentScreen(AppPage.HOME)}
