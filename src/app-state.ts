@@ -1,5 +1,8 @@
 import { action, makeAutoObservable, observable } from "mobx";
 
+import { Unit } from "./unit/unit";
+import { createUnits } from "./utils/unit-utils";
+
 export enum AppPage {
   HOME = "home",
   PLAY = "play",
@@ -10,8 +13,12 @@ export enum AppPage {
 export class AppState {
   @observable currentPage = AppPage.HOME;
 
+  allUnits: Unit[] = [];
+
   constructor() {
     makeAutoObservable(this);
+
+    this.allUnits = createUnits();
   }
 
   @action setCurrentScreen(screen: AppPage) {
