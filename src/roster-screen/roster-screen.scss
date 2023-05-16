@@ -21,4 +21,10 @@
       border-color: #404854;
     }
   }
+
+  .unit-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
 }

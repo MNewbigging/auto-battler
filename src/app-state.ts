@@ -1,6 +1,6 @@
 import { action, makeAutoObservable, observable } from "mobx";
 
-import { Unit } from "./unit/unit";
+import { Unit } from "./units/unit";
 import { createUnits } from "./utils/unit-utils";
 
 export enum AppPage {
