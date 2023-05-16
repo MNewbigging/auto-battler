@@ -2,12 +2,33 @@ import "./home-screen.scss";
 
 import React from "react";
 
-export const HomeScreen: React.FC = () => {
+import { AppPage, AppState } from "../app-state";
+
+interface HomeScreenProps {
+  appState: AppState;
+}
+
+export const HomeScreen: React.FC<HomeScreenProps> = ({ appState }) => {
   return (
     <div className="home-screen">
-      <div className="menu-item bp4-text-large">Play</div>
-      <div className="menu-item bp4-text-large">Roster</div>
-      <div className="menu-item bp4-text-large">Team builder</div>
+      <div
+        className="menu-item bp4-text-large"
+        onClick={() => appState.setCurrentScreen(AppPage.PLAY)}
+      >
+        Play
+      </div>
+      <div
+        className="menu-item bp4-text-large"
+        onClick={() => appState.setCurrentScreen(AppPage.PLAY)}
+      >
+        Roster
+      </div>
+      <div
+        className="menu-item bp4-text-large"
+        onClick={() => appState.setCurrentScreen(AppPage.PLAY)}
+      >
+        Team builder
+      </div>
     </div>
   );
 };
