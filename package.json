@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^4.17.8",
+    "framer-motion": "^10.12.12",
     "mobx": "^6.8.0",
     "mobx-react-lite": "^3.4.3",
     "react": "^18.2.0",

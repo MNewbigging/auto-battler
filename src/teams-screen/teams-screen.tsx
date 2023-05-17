@@ -17,6 +17,13 @@ export const TeamsScreen: React.FC<TeamsScreenProps> = observer(
 
         <div
           className="menu-item bp4-text-large"
+          onClick={() => appState.setCurrentScreen(AppPage.TEAM_BUILDER)}
+        >
+          Build team
+        </div>
+
+        <div
+          className="menu-item bp4-text-large"
           onClick={() => appState.setCurrentScreen(AppPage.HOME)}
         >
           Back
