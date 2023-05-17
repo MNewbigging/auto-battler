@@ -7,6 +7,7 @@ export enum AppPage {
   HOME = "home",
   PLAY = "play",
   ROSTER = "roster",
+  TEAMS = "teams",
   TEAM_BUILDER = "team-builder",
 }
 

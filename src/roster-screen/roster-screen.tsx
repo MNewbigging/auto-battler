@@ -17,8 +17,8 @@ export const RosterScreen: React.FC<RosterScreenProps> = observer(
         <h2 className="bp4-heading">Roster</h2>
 
         <div className="unit-list">
-          {appState.allUnits.map((unit) => (
-            <UnitCard unit={unit} />
+          {appState.allUnits.map((unit, index) => (
+            <UnitCard key={`unit-${index}`} unit={unit} />
           ))}
         </div>
 

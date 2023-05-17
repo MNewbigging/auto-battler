@@ -27,9 +27,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ appState }) => {
       </div>
       <div
         className="menu-item bp4-text-large"
-        onClick={() => appState.setCurrentScreen(AppPage.TEAM_BUILDER)}
+        onClick={() => appState.setCurrentScreen(AppPage.TEAMS)}
       >
-        Team builder
+        Teams
       </div>
     </div>
   );
