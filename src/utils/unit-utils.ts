@@ -1,3 +1,4 @@
+import { Team } from "../app-state";
 import { Unit } from "../units/unit";
 
 export function createUnits() {
@@ -26,4 +27,16 @@ export function createUnits() {
   shelly.activationSpeed = 3;
 
   return [bludger, stickler, bomber, shelly];
+}
+
+export function createTeams() {
+  const allUnits = createUnits();
+
+  const team1Units = allUnits.slice(0, 4);
+  const team1 = new Team("Team 1", team1Units);
+
+  const team2Units = allUnits.slice(0, 4).reverse();
+  const team2 = new Team("Team 2", team2Units);
+
+  return [team1, team2];
 }

@@ -1,9 +1,10 @@
 import { DropResult } from "@hello-pangea/dnd";
 import { action, makeAutoObservable, observable } from "mobx";
 
+import { GameState } from "./game-state";
 import { Unit } from "./units/unit";
 import { createId } from "./utils/utils";
-import { createUnits } from "./utils/unit-utils";
+import { createTeams, createUnits } from "./utils/unit-utils";
 
 export enum AppPage {
   HOME = "home",
@@ -11,6 +12,7 @@ export enum AppPage {
   ROSTER = "roster",
   TEAMS = "teams",
   TEAM_BUILDER = "team-builder",
+  GAME = "game",
 }
 
 export class Team {
@@ -29,10 +31,13 @@ export class AppState {
   @observable leftTeam?: Team;
   @observable rightTeam?: Team;
 
+  gameState?: GameState;
+
   constructor() {
     makeAutoObservable(this);
 
     this.allUnits = createUnits();
+    this.teams = createTeams();
   }
 
   @action setCurrentScreen(screen: AppPage) {
@@ -92,4 +97,14 @@ export class AppState {
   @action setRightTeam = (team: Team) => {
     this.rightTeam = team;
   };
+
+  play() {
+    if (!this.leftTeam || !this.rightTeam) {
+      return;
+    }
+
+    this.gameState = new GameState(this.leftTeam, this.rightTeam);
+
+    this.setCurrentScreen(AppPage.GAME);
+  }
 }

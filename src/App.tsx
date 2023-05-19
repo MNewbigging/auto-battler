@@ -4,6 +4,7 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 
 import { AppPage, AppState } from "./app-state";
+import { GameScreen } from "./game-screen/game-screen";
 import { HomeScreen } from "./home-screen/home-screen";
 import { PlayScreen } from "./play-screen/play-screen";
 import { RosterScreen } from "./roster-screen/roster-screen";
@@ -15,7 +16,7 @@ interface AppProps {
 }
 
 export const App: React.FC<AppProps> = observer(({ appState }) => {
-  let page: JSX.Element;
+  let page: JSX.Element | null = null;
   switch (appState.currentPage) {
     case AppPage.HOME:
       page = <HomeScreen appState={appState} />;
@@ -31,6 +32,11 @@ export const App: React.FC<AppProps> = observer(({ appState }) => {
       break;
     case AppPage.TEAM_BUILDER:
       page = <TeamBuilderScreen appState={appState} />;
+      break;
+    case AppPage.GAME:
+      if (appState.gameState) {
+        page = <GameScreen gameState={appState.gameState} />;
+      }
       break;
     default:
       page = <HomeScreen appState={appState} />;

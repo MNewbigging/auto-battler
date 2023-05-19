@@ -32,6 +32,12 @@ export const PlayScreen: React.FC<PlayScreenProps> = observer(
 
         <div
           className="menu-item bp4-text-large"
+          onClick={() => appState.play()}
+        >
+          Play
+        </div>
+        <div
+          className="menu-item bp4-text-large"
           onClick={() => appState.setCurrentScreen(AppPage.HOME)}
         >
           Back
