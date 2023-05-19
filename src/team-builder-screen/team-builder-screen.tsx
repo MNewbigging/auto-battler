@@ -20,37 +20,7 @@ export const TeamBuilderScreen: React.FC<TeamBuilderProps> = observer(
         <h2 className="bp4-heading">Team Builder</h2>
 
         <div className="team-list">
-          <DragDropContext onDragEnd={appState.onTeamBuildDragEnd}>
-            <Droppable droppableId="team-builder" direction="horizontal">
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  className="team-dropzone"
-                >
-                  {appState.teamBuilderUnits.map((unit, index) => (
-                    <Draggable
-                      draggableId={`team-${unit.name}-${index}`}
-                      index={index}
-                      key={`team-unit-${index}`}
-                    >
-                      {(provided) => (
-                        <div
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          ref={provided.innerRef}
-                        >
-                          <UnitCard unit={unit} />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+          <UnitDragList appState={appState} />
         </div>
 
         <h3 className="bp4-heading">Available units</h3>

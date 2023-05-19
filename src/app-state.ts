@@ -30,7 +30,6 @@ export class AppState {
 
   @action addUnitToTeam = (unit: Unit) => {
     this.teamBuilderUnits.push(unit);
-    console.log("added unit to team", this.teamBuilderUnits);
   };
 
   @action onTeamBuildDragEnd = (result: DropResult) => {
@@ -58,7 +57,5 @@ export class AppState {
 
     // Add to new position
     this.teamBuilderUnits.splice(destination.index, 0, unit);
-
-    console.log("reordered units");
   };
 }
