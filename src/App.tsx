@@ -35,7 +35,12 @@ export const App: React.FC<AppProps> = observer(({ appState }) => {
       break;
     case AppPage.GAME:
       if (appState.gameState) {
-        page = <GameScreen gameState={appState.gameState} />;
+        page = (
+          <GameScreen
+            gameState={appState.gameState}
+            onExit={() => appState.setCurrentScreen(AppPage.PLAY)}
+          />
+        );
       }
       break;
     default:
