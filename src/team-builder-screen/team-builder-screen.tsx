@@ -18,6 +18,11 @@ export const TeamBuilderScreen: React.FC<TeamBuilderProps> = observer(
         <h2 className="bp4-heading">Team Builder</h2>
 
         <div className="team-list">
+          {appState.teamBuilderUnits.length === 0 && (
+            <span>
+              Click a unit below to add it to the team, then drag to reorder
+            </span>
+          )}
           <UnitDragList appState={appState} />
         </div>
 

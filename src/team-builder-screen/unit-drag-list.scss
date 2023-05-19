@@ -1,7 +1,49 @@
 .unit-list-dropzone {
   display: flex;
 
-  .unit-card {
-    margin-right: 10px;
+  .unit-wrapper {
+    position: relative;
+
+    &:hover {
+      .remove-icon {
+        opacity: 1;
+      }
+    }
+
+    .unit-card {
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+
+    .remove-icon {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+
+      width: 40px;
+      height: 40px;
+
+      border-radius: 50%;
+      background-color: red;
+
+      opacity: 0;
+      transition: opacity 0.15s linear;
+
+      cursor: pointer;
+
+      display: flex;
+      justify-items: center;
+      align-items: center;
+
+      &::before {
+        content: "X";
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        color: white;
+        font-size: larger;
+      }
+    }
   }
 }

@@ -32,12 +32,15 @@ export class AppState {
     this.teamBuilderUnits.push(unit);
   };
 
+  @action removeUnitFromTeam = (index: number) => {
+    this.teamBuilderUnits.splice(index, 1);
+  };
+
   @action onTeamBuildDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
 
     if (!destination) {
-      // Was not dropped on the droppable list parent
-      // Could remove the item from list this way
+      // Not on dropzone, do nothing
       return;
     }
 
