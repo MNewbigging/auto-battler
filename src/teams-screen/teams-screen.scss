@@ -8,6 +8,22 @@
   justify-content: center;
   gap: 20px;
 
+  .teams-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .team {
+      padding: 10px;
+      border: 1px solid #404854;
+      border-radius: 6px;
+
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+  }
+
   .menu-item {
     cursor: pointer;
     padding: 20px;

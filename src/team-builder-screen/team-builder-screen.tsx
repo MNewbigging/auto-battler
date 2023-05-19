@@ -34,6 +34,12 @@ export const TeamBuilderScreen: React.FC<TeamBuilderProps> = observer(
 
         <div
           className="menu-item bp4-text-large"
+          onClick={() => appState.saveTeam()}
+        >
+          Save team
+        </div>
+        <div
+          className="menu-item bp4-text-large"
           onClick={() => appState.setCurrentScreen(AppPage.TEAMS)}
         >
           Back

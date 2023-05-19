@@ -18,6 +18,8 @@ export class AppState {
   allUnits: Unit[] = [];
   @observable teamBuilderUnits: Unit[] = [];
 
+  @observable teams: Unit[][] = [];
+
   constructor() {
     makeAutoObservable(this);
 
@@ -61,4 +63,14 @@ export class AppState {
     // Add to new position
     this.teamBuilderUnits.splice(destination.index, 0, unit);
   };
+
+  @action saveTeam() {
+    if (!this.teamBuilderUnits.length) {
+      return;
+    }
+
+    this.teams.push(this.teamBuilderUnits);
+
+    this.teamBuilderUnits = [];
+  }
 }
