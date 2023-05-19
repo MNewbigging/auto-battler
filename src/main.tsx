@@ -9,7 +9,5 @@ import { AppState } from "./app-state";
 const appState = new AppState();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <App appState={appState} />
-  </React.StrictMode>
+  <App appState={appState} />
 );

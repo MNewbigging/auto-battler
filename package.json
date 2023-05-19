@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^4.17.8",
+    "@blueprintjs/icons": "^4.15.1",
+    "@blueprintjs/popover2": "^1.14.4",
+    "@blueprintjs/select": "^4.9.17",
     "@hello-pangea/dnd": "^16.2.0",
     "mobx": "^6.8.0",
     "mobx-react-lite": "^3.4.3",

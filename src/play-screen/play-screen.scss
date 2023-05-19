@@ -8,6 +8,13 @@
   justify-content: center;
   gap: 20px;
 
+  .team-picker-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+  }
+
   .menu-item {
     cursor: pointer;
     padding: 20px;

@@ -19,8 +19,8 @@ export const TeamsScreen: React.FC<TeamsScreenProps> = observer(
         <div className="teams-list">
           {appState.teams.map((team, teamIdx) => (
             <div className="team" key={`team-${teamIdx}`}>
-              <div>Team {teamIdx + 1}</div>
-              {team.map((unit, unitIdx) => (
+              <div>{team.name}</div>
+              {team.units.map((unit, unitIdx) => (
                 <UnitCard key={`team-${teamIdx}-unit-${unitIdx}`} unit={unit} />
               ))}
             </div>

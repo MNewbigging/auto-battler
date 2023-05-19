@@ -2,6 +2,7 @@ import { DropResult } from "@hello-pangea/dnd";
 import { action, makeAutoObservable, observable } from "mobx";
 
 import { Unit } from "./units/unit";
+import { createId } from "./utils/utils";
 import { createUnits } from "./utils/unit-utils";
 
 export enum AppPage {
@@ -12,13 +13,21 @@ export enum AppPage {
   TEAM_BUILDER = "team-builder",
 }
 
+export class Team {
+  readonly id = createId();
+
+  constructor(public name: string, public units: Unit[]) {}
+}
+
 export class AppState {
   @observable currentPage = AppPage.HOME;
 
   allUnits: Unit[] = [];
   @observable teamBuilderUnits: Unit[] = [];
 
-  @observable teams: Unit[][] = [];
+  @observable teams: Team[] = [];
+  @observable leftTeam?: Team;
+  @observable rightTeam?: Team;
 
   constructor() {
     makeAutoObservable(this);
@@ -69,8 +78,18 @@ export class AppState {
       return;
     }
 
-    this.teams.push(this.teamBuilderUnits);
+    this.teams.push(
+      new Team(`Team ${this.teams.length + 1}`, this.teamBuilderUnits)
+    );
 
     this.teamBuilderUnits = [];
   }
+
+  @action setLeftTeam = (team: Team) => {
+    this.leftTeam = team;
+  };
+
+  @action setRightTeam = (team: Team) => {
+    this.rightTeam = team;
+  };
 }
