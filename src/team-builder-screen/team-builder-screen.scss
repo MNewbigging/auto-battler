@@ -21,4 +21,14 @@
       border-color: #404854;
     }
   }
+
+  .team-list {
+    min-width: 50%;
+    min-height: 5px;
+    border-bottom: 5px solid blue;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

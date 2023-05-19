@@ -4,6 +4,7 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 
 import { AppPage, AppState } from "../app-state";
+import { UnitCard } from "../unit-card/unit-card";
 import { UnitList } from "../unit-list/unit-list";
 
 interface TeamBuilderProps {
@@ -16,9 +17,19 @@ export const TeamBuilderScreen: React.FC<TeamBuilderProps> = observer(
       <div className="team-builder-screen">
         <h2 className="bp4-heading">Team Builder</h2>
 
-        <div className="team-list"></div>
+        <div className="team-list">
+          {appState.teamBuilderUnits.length === 0 && (
+            <span>
+              Select units to add to the team, drag and drop to reorder them
+            </span>
+          )}
+        </div>
 
-        <UnitList units={appState.allUnits} />
+        <h3 className="bp4-heading">Available units</h3>
+        <UnitList
+          units={appState.allUnits}
+          onClickUnit={appState.addUnitToTeam}
+        />
 
         <div
           className="menu-item bp4-text-large"

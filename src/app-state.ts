@@ -15,6 +15,7 @@ export class AppState {
   @observable currentPage = AppPage.HOME;
 
   allUnits: Unit[] = [];
+  @observable teamBuilderUnits: Unit[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -25,4 +26,13 @@ export class AppState {
   @action setCurrentScreen(screen: AppPage) {
     this.currentPage = screen;
   }
+
+  @action setTeamBuilderUnits = (units: Unit[]) => {
+    this.teamBuilderUnits = units;
+    console.log("set units");
+  };
+
+  @action addUnitToTeam = (unit: Unit) => {
+    this.teamBuilderUnits.push(unit);
+  };
 }

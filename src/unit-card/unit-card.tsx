@@ -7,15 +7,18 @@ import { Unit } from "../units/unit";
 
 interface UnitCardProps {
   unit: Unit;
+  onClick?: () => void;
 }
 
-export const UnitCard: React.FC<UnitCardProps> = observer(({ unit }) => {
-  return (
-    <div className="unit-card">
-      <div className="name">{unit.name}</div>
-      <div>Health: {unit.health}</div>
-      <div>Attack: {unit.attack}</div>
-      <div>Speed: {unit.activationSpeed}</div>
-    </div>
-  );
-});
+export const UnitCard: React.FC<UnitCardProps> = observer(
+  ({ unit, onClick }) => {
+    return (
+      <div className="unit-card" onClick={onClick}>
+        <div className="name">{unit.name}</div>
+        <div>Health: {unit.health}</div>
+        <div>Attack: {unit.attack}</div>
+        <div>Speed: {unit.activationSpeed}</div>
+      </div>
+    );
+  }
+);

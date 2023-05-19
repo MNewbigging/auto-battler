@@ -8,14 +8,21 @@ import { UnitCard } from "../unit-card/unit-card";
 
 interface UnitListProps {
   units: Unit[];
+  onClickUnit?: (unit: Unit) => void;
 }
 
-export const UnitList: React.FC<UnitListProps> = observer(({ units }) => {
-  return (
-    <div className="unit-list">
-      {units.map((unit, index) => (
-        <UnitCard key={`unit-${index}`} unit={unit} />
-      ))}
-    </div>
-  );
-});
+export const UnitList: React.FC<UnitListProps> = observer(
+  ({ units, onClickUnit }) => {
+    return (
+      <div className="unit-list">
+        {units.map((unit, index) => (
+          <UnitCard
+            key={`unit-${index}`}
+            unit={unit}
+            onClick={() => onClickUnit?.(unit)}
+          />
+        ))}
+      </div>
+    );
+  }
+);
