@@ -1,11 +1,9 @@
 import "./team-builder-screen.scss";
 
 import React from "react";
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { observer } from "mobx-react-lite";
 
 import { AppPage, AppState } from "../app-state";
-import { UnitCard } from "../unit-card/unit-card";
 import { UnitDragList } from "./unit-drag-list";
 import { UnitList } from "../unit-list/unit-list";
 
