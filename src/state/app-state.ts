@@ -86,7 +86,7 @@ export class AppState {
 
     // Create game teams
     const left = new GameTeam(this.leftTeam);
-    const right = new GameTeam(this.rightTeam);
+    const right = new GameTeam(this.rightTeam, true);
 
     this.gameState = new GameState(left, right);
 

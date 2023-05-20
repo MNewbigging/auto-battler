@@ -1,24 +1,12 @@
-import { action, computed, makeAutoObservable, observable } from "mobx";
+import {
+  action,
+  computed,
+  makeAutoObservable,
+  makeObservable,
+  observable,
+} from "mobx";
 
 import { GameTeam, Team } from "./team";
-
-/**
- * Unit types needed:
- *
- * - Base unit properties - what appears on the roster cards, the basic props of a unit
- * - Built unit properties - when team building, holds any changes as a result of mods
- * - Game unit properties - when in a game, tracks state of props (e.g health going down)
- *
- * - Base unit props never change - they are hardcoded
- * - Built unit props could change - user-defined and need to be stored
- * - Game unit props do change - transient, only changing during a game
- *
- *
- * Roster - base
- * Team build - built
- * Game - game
- * After game - built
- */
 
 // Base units are used in the roster
 export interface BaseUnit {
@@ -39,6 +27,8 @@ export class BuiltUnit implements BaseUnit {
   @observable activationSpeedAnimating = false;
 
   constructor(public baseUnit: BaseUnit) {
+    makeAutoObservable(this);
+
     this.name = baseUnit.name;
     this.health = baseUnit.health;
     this.attack = baseUnit.attack;
@@ -54,6 +44,15 @@ export class GameUnit extends BuiltUnit {
 
   constructor(baseUnit: BaseUnit) {
     super(baseUnit);
+
+    makeObservable(this, {
+      activationCooldown: observable,
+      activationCooldownAnimating: observable,
+      activationAnimating: observable,
+      isAnimating: computed,
+      reduceActivationCooldown: action,
+      activate: action,
+    });
 
     this.activationCooldown = this.activationSpeed;
   }

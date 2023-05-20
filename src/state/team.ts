@@ -1,4 +1,4 @@
-import { action, makeAutoObservable, observable } from "mobx";
+import { action, makeAutoObservable, makeObservable, observable } from "mobx";
 
 import { BuiltUnit, GameUnit } from "./unit";
 import { createId } from "../utils/utils";
@@ -19,8 +19,11 @@ export class GameTeam {
   readonly name: string;
   @observable units: GameUnit[];
 
-  constructor(public team: Team) {
-    makeAutoObservable(this);
+  constructor(public team: Team, public rightSide = false) {
+    makeObservable(this, {
+      units: observable,
+      destroyUnit: action,
+    });
 
     this.name = team.name;
 
@@ -28,10 +31,13 @@ export class GameTeam {
     this.units = team.units.map(
       (builtUnit) => new GameUnit(builtUnit.baseUnit)
     );
+
+    // If this is a right-sided team, it should reverse its units
+    this.units = this.units.reverse();
   }
 
   getActiveUnit() {
-    return this.units[this.units.length - 1];
+    return this.rightSide ? this.units[0] : this.units[this.units.length - 1];
   }
 
   @action destroyUnit(unit: BuiltUnit) {

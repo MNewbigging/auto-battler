@@ -16,11 +16,7 @@ export class GameState {
   }
 
   setup() {
-    // Right team should reverse its unit order
-    this.rightTeam.units = this.rightTeam.units.reverse();
-
-    console.log("left team units", this.leftTeam.units);
-    console.log("right team units", this.rightTeam.units);
+    //
   }
 
   @action nextTurn() {
