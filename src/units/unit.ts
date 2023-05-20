@@ -1,4 +1,4 @@
-import { action, makeAutoObservable, observable } from "mobx";
+import { action, computed, makeAutoObservable, observable } from "mobx";
 
 import { Team } from "./team";
 
@@ -17,6 +17,7 @@ export class Unit implements UnitDefaultProps {
   @observable healthAnimating = false;
   @observable attack: number;
   @observable activationSpeed: number;
+  @observable activationAnimating = false;
   @observable activationCooldown: number;
   @observable activeCooldownAnimating = false;
 
@@ -31,12 +32,18 @@ export class Unit implements UnitDefaultProps {
     this.activationCooldown = this.activationSpeed;
   }
 
+  @computed isAnimating() {
+    return (
+      this.healthAnimating &&
+      this.activationAnimating &&
+      this.activeCooldownAnimating
+    );
+  }
+
   @action reduceActivationCooldown() {
     this.activationCooldown--;
 
     this.activeCooldownAnimating = true;
-
-    console.log("cooldown animating");
   }
 
   @action activate(opponentTeam: Team) {
@@ -44,5 +51,7 @@ export class Unit implements UnitDefaultProps {
     const activeTarget = opponentTeam.getActiveUnit();
 
     activeTarget.health -= this.attack;
+
+    this.activationAnimating = true;
   }
 }

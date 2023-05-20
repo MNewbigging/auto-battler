@@ -9,6 +9,10 @@
   align-items: center;
   gap: 5px;
 
+  &.active {
+    animation: pulse 0.5s linear;
+  }
+
   .name {
     font-weight: bold;
   }

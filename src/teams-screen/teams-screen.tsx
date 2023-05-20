@@ -5,6 +5,7 @@ import { observer } from "mobx-react-lite";
 
 import { AppPage, AppState } from "../app-state";
 import { UnitCard } from "../unit-card/unit-card";
+import { UnitList } from "../unit-list/unit-list";
 
 interface TeamsScreenProps {
   appState: AppState;
@@ -20,9 +21,7 @@ export const TeamsScreen: React.FC<TeamsScreenProps> = observer(
           {appState.teams.map((team, teamIdx) => (
             <div className="team" key={`team-${teamIdx}`}>
               <div>{team.name}</div>
-              {team.units.map((unit, unitIdx) => (
-                <UnitCard key={`team-${teamIdx}-unit-${unitIdx}`} unit={unit} />
-              ))}
+              <UnitList units={team.units} />
             </div>
           ))}
         </div>

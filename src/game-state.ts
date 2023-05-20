@@ -1,4 +1,4 @@
-import { action, makeAutoObservable, observable } from "mobx";
+import { action, autorun, makeAutoObservable, observable } from "mobx";
 
 import { Team } from "./units/team";
 
@@ -16,7 +16,8 @@ export class GameState {
   }
 
   setup() {
-    // Create unit instances for the fight
+    // Right team should reverse its unit order
+    this.rightTeam.units = this.rightTeam.units.reverse();
   }
 
   @action nextTurn() {
@@ -56,5 +57,14 @@ export class GameState {
     if (rightActiveUnit.health <= 0) {
       this.rightTeam.destroyUnit(rightActiveUnit);
     }
+
+    // Once all animations for this turn have stopped, go to next turn
+    autorun(() => {
+      if (leftActiveUnit.isAnimating() || rightActiveUnit.isAnimating()) {
+        return;
+      }
+
+      console.log("neither unit animating");
+    });
   }
 }
