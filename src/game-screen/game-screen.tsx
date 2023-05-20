@@ -14,6 +14,12 @@ interface GameScreenProps {
 
 export const GameScreen: React.FC<GameScreenProps> = observer(
   ({ gameState, onExit }) => {
+    const turnClasses = [
+      "bp4-heading",
+      "turn-timer",
+      gameState.turnAnimating ? "active" : "",
+    ];
+
     return (
       <div className="game-screen">
         <div className="game-navbar">
@@ -22,7 +28,9 @@ export const GameScreen: React.FC<GameScreenProps> = observer(
 
         <div className="header">
           <Observer>
-            {() => <h1 className="bp4-heading">Turn {gameState.turn}</h1>}
+            {() => (
+              <h1 className={turnClasses.join(" ")}>Turn {gameState.turn}</h1>
+            )}
           </Observer>
         </div>
 

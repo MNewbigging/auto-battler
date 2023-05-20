@@ -21,6 +21,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .turn-timer {
+      &.active {
+        animation: pulse 0.5s linear;
+      }
+    }
   }
 
   .left-team-area,
@@ -41,5 +47,17 @@
     grid-area: right-side;
     align-items: start;
     padding-left: 20px;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
   }
 }

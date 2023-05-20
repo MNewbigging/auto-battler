@@ -14,9 +14,11 @@ export class Unit implements UnitDefaultProps {
   // Set from the default props
   name: string;
   @observable health: number;
+  @observable healthAnimating = false;
   @observable attack: number;
   @observable activationSpeed: number;
   @observable activationCooldown: number;
+  @observable activeCooldownAnimating = false;
 
   constructor(private defaultProps: UnitDefaultProps) {
     makeAutoObservable(this);
@@ -27,6 +29,14 @@ export class Unit implements UnitDefaultProps {
     this.attack = defaultProps.attack;
     this.activationSpeed = defaultProps.activationSpeed;
     this.activationCooldown = this.activationSpeed;
+  }
+
+  @action reduceActivationCooldown() {
+    this.activationCooldown--;
+
+    this.activeCooldownAnimating = true;
+
+    console.log("cooldown animating");
   }
 
   @action activate(opponentTeam: Team) {

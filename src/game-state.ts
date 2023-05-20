@@ -4,6 +4,7 @@ import { Team } from "./units/team";
 
 export class GameState {
   @observable turn = 0;
+  @observable turnAnimating = false;
 
   constructor(public leftTeam: Team, public rightTeam: Team) {
     makeAutoObservable(this);
@@ -21,13 +22,14 @@ export class GameState {
   @action nextTurn() {
     // Increment turn counter
     this.turn++;
+    this.turnAnimating = true;
 
     // Reduce activation times of active units
     const leftActiveUnit = this.leftTeam.getActiveUnit();
     const rightActiveUnit = this.rightTeam.getActiveUnit();
 
-    leftActiveUnit.activationCooldown--;
-    rightActiveUnit.activationCooldown--;
+    leftActiveUnit.reduceActivationCooldown();
+    rightActiveUnit.reduceActivationCooldown();
 
     // If cooldown is 0, activate the unit
     if (leftActiveUnit.activationCooldown <= 0) {
