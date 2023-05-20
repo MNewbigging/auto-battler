@@ -2,7 +2,7 @@ import "./home-screen.scss";
 
 import React from "react";
 
-import { AppPage, AppState } from "../app-state";
+import { AppPage, AppState } from "../state/app-state";
 
 interface HomeScreenProps {
   appState: AppState;

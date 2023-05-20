@@ -8,6 +8,12 @@
   justify-content: center;
   gap: 20px;
 
+  .roster-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
   .menu-item {
     cursor: pointer;
     padding: 20px;

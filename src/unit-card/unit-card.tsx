@@ -4,10 +4,10 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { runInAction } from "mobx";
 
-import { Unit } from "../units/unit";
+import { GameUnit } from "../state/unit";
 
 interface UnitCardProps {
-  unit: Unit;
+  unit: Partial<GameUnit>;
   onClick?: () => void;
 }
 
@@ -17,7 +17,7 @@ export const UnitCard: React.FC<UnitCardProps> = observer(
     const healthClasses = ["health", unit.healthAnimating ? "active" : ""];
     const activeCooldownClasses = [
       "cooldown",
-      unit.activeCooldownAnimating ? "active" : "",
+      unit.activationCooldownAnimating ? "active" : "",
     ];
 
     return (
@@ -44,10 +44,13 @@ export const UnitCard: React.FC<UnitCardProps> = observer(
         <div
           className={activeCooldownClasses.join(" ")}
           onAnimationEnd={() =>
-            runInAction(() => (unit.activeCooldownAnimating = false))
+            runInAction(() => (unit.activationCooldownAnimating = false))
           }
         >
-          Activates: {unit.activationCooldown}
+          Activates:{" "}
+          {unit.activationCooldown !== undefined
+            ? unit.activationCooldown
+            : unit.activationSpeed}
         </div>
       </div>
     );

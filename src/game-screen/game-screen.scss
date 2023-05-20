@@ -35,6 +35,13 @@
     flex-direction: column;
     justify-content: start;
     gap: 20px;
+
+    .team-unit-list {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 20px;
+    }
   }
 
   .left-team-area {

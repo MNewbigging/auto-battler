@@ -2,7 +2,7 @@ import React from "react";
 import { Button, MenuItem } from "@blueprintjs/core";
 import { ItemRenderer, Select2 } from "@blueprintjs/select";
 
-import { Team } from "../app-state";
+import { Team } from "../state/app-state";
 
 const renderTeam: ItemRenderer<Team> = (
   team,

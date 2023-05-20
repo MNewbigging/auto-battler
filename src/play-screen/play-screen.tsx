@@ -3,7 +3,7 @@ import "./play-screen.scss";
 import React from "react";
 import { observer } from "mobx-react-lite";
 
-import { AppPage, AppState } from "../app-state";
+import { AppPage, AppState } from "../state/app-state";
 import { TeamSelector } from "./team-selector";
 
 interface PlayScreenProps {

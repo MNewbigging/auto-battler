@@ -4,17 +4,17 @@ import React from "react";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { Observer, observer } from "mobx-react-lite";
 
-import { AppState } from "../app-state";
+import { TeamBuilderState } from "../state/team-builder-state";
 import { UnitCard } from "../unit-card/unit-card";
 
 interface UnitDragListProps {
-  appState: AppState;
+  builderState: TeamBuilderState;
 }
 
 export const UnitDragList: React.FC<UnitDragListProps> = observer(
-  ({ appState }) => {
+  ({ builderState }) => {
     return (
-      <DragDropContext onDragEnd={appState.onTeamBuildDragEnd}>
+      <DragDropContext onDragEnd={builderState.onTeamBuildDragEnd}>
         <Droppable droppableId="team-builder" direction="horizontal">
           {(provided) => (
             <Observer>
@@ -24,7 +24,7 @@ export const UnitDragList: React.FC<UnitDragListProps> = observer(
                   {...provided.droppableProps}
                   className="unit-list-dropzone"
                 >
-                  {appState.teamBuilderUnits.map((unit, index) => (
+                  {builderState.units.map((unit, index) => (
                     <Draggable
                       draggableId={`team-${unit.name}-${index}`}
                       index={index}
@@ -40,7 +40,9 @@ export const UnitDragList: React.FC<UnitDragListProps> = observer(
                           <UnitCard unit={unit} />
                           <div
                             className="remove-icon"
-                            onClick={() => appState.removeUnitFromTeam(index)}
+                            onClick={() =>
+                              builderState.removeUnitFromTeam(index)
+                            }
                           ></div>
                         </div>
                       )}

@@ -3,7 +3,7 @@ import "./app.scss";
 import React from "react";
 import { observer } from "mobx-react-lite";
 
-import { AppPage, AppState } from "./app-state";
+import { AppPage, AppState } from "./state/app-state";
 import { GameScreen } from "./game-screen/game-screen";
 import { HomeScreen } from "./home-screen/home-screen";
 import { PlayScreen } from "./play-screen/play-screen";
@@ -31,14 +31,23 @@ export const App: React.FC<AppProps> = observer(({ appState }) => {
       page = <TeamsScreen appState={appState} />;
       break;
     case AppPage.TEAM_BUILDER:
-      page = <TeamBuilderScreen appState={appState} />;
+      if (appState.teamBuilderState) {
+        page = (
+          <TeamBuilderScreen
+            builderState={appState.teamBuilderState}
+            onSave={appState.saveTeam}
+            onCancel={appState.cancelBuildTeam}
+          />
+        );
+      }
+
       break;
     case AppPage.GAME:
       if (appState.gameState) {
         page = (
           <GameScreen
             gameState={appState.gameState}
-            onExit={() => appState.setCurrentScreen(AppPage.PLAY)}
+            onExit={() => appState.exitGame()}
           />
         );
       }

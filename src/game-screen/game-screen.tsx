@@ -4,8 +4,8 @@ import React from "react";
 import { Button } from "@blueprintjs/core";
 import { Observer, observer } from "mobx-react-lite";
 
-import { GameState } from "../game-state";
-import { UnitList } from "../unit-list/unit-list";
+import { GameState } from "../state/game-state";
+import { UnitCard } from "../unit-card/unit-card";
 
 interface GameScreenProps {
   gameState: GameState;
@@ -36,11 +36,19 @@ export const GameScreen: React.FC<GameScreenProps> = observer(
 
         <div className="left-team-area">
           <h2 className="team-name bp4-heading">{gameState.leftTeam.name}</h2>
-          <UnitList units={gameState.leftTeam.units} />
+          <div className="team-unit-list">
+            {gameState.leftTeam.units.map((unit, index) => (
+              <UnitCard key={`left-unit-${index}`} unit={unit} />
+            ))}
+          </div>
         </div>
         <div className="right-team-area">
           <h2 className="team-name bp4-heading">{gameState.rightTeam.name}</h2>
-          <UnitList units={gameState.rightTeam.units} />
+          <div className="team-unit-list">
+            {gameState.rightTeam.units.map((unit, index) => (
+              <UnitCard key={`right-unit-${index}`} unit={unit} />
+            ))}
+          </div>
         </div>
       </div>
     );

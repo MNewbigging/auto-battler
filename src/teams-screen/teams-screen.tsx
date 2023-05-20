@@ -3,9 +3,8 @@ import "./teams-screen.scss";
 import React from "react";
 import { observer } from "mobx-react-lite";
 
-import { AppPage, AppState } from "../app-state";
+import { AppPage, AppState } from "../state/app-state";
 import { UnitCard } from "../unit-card/unit-card";
-import { UnitList } from "../unit-list/unit-list";
 
 interface TeamsScreenProps {
   appState: AppState;
@@ -21,15 +20,19 @@ export const TeamsScreen: React.FC<TeamsScreenProps> = observer(
           {appState.teams.map((team, teamIdx) => (
             <div className="team" key={`team-${teamIdx}`}>
               <div>{team.name}</div>
-              <UnitList units={team.units} />
+              <div className="team-unit-list">
+                {team.units.map((unit, unitIdx) => (
+                  <UnitCard
+                    key={`team-${teamIdx}-unit-${unitIdx}`}
+                    unit={unit}
+                  />
+                ))}
+              </div>
             </div>
           ))}
         </div>
 
-        <div
-          className="menu-item bp4-text-large"
-          onClick={() => appState.setCurrentScreen(AppPage.TEAM_BUILDER)}
-        >
+        <div className="menu-item bp4-text-large" onClick={appState.buildTeam}>
           Build team
         </div>
 

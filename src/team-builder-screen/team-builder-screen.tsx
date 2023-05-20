@@ -3,45 +3,46 @@ import "./team-builder-screen.scss";
 import React from "react";
 import { observer } from "mobx-react-lite";
 
-import { AppPage, AppState } from "../app-state";
+import { TeamBuilderState } from "../state/team-builder-state";
+import { UnitCard } from "../unit-card/unit-card";
 import { UnitDragList } from "./unit-drag-list";
-import { UnitList } from "../unit-list/unit-list";
 
 interface TeamBuilderProps {
-  appState: AppState;
+  builderState: TeamBuilderState;
+  onSave: () => void;
+  onCancel: () => void;
 }
 
 export const TeamBuilderScreen: React.FC<TeamBuilderProps> = observer(
-  ({ appState }) => {
+  ({ builderState, onSave, onCancel }) => {
     return (
       <div className="team-builder-screen">
         <h2 className="bp4-heading">Team Builder</h2>
 
         <div className="team-list">
-          {appState.teamBuilderUnits.length === 0 && (
+          {builderState.units.length === 0 && (
             <span>
               Click a unit below to add it to the team, then drag to reorder
             </span>
           )}
-          <UnitDragList appState={appState} />
+          <UnitDragList builderState={builderState} />
         </div>
 
         <h3 className="bp4-heading">Available units</h3>
-        <UnitList
-          units={appState.allUnits}
-          onClickUnit={appState.addUnitToTeam}
-        />
+        <div className="roster-list">
+          {builderState.rosterUnits.map((unit, index) => (
+            <UnitCard
+              key={`roster-unit-${index}`}
+              unit={unit}
+              onClick={() => builderState.addUnitToTeam(unit)}
+            />
+          ))}
+        </div>
 
-        <div
-          className="menu-item bp4-text-large"
-          onClick={() => appState.saveTeam()}
-        >
+        <div className="menu-item bp4-text-large" onClick={onSave}>
           Save team
         </div>
-        <div
-          className="menu-item bp4-text-large"
-          onClick={() => appState.setCurrentScreen(AppPage.TEAMS)}
-        >
+        <div className="menu-item bp4-text-large" onClick={onCancel}>
           Back
         </div>
       </div>

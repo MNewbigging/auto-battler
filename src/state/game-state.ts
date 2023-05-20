@@ -1,12 +1,12 @@
 import { action, autorun, makeAutoObservable, observable } from "mobx";
 
-import { Team } from "./units/team";
+import { GameTeam } from "./team";
 
 export class GameState {
   @observable turn = 0;
   @observable turnAnimating = false;
 
-  constructor(public leftTeam: Team, public rightTeam: Team) {
+  constructor(public leftTeam: GameTeam, public rightTeam: GameTeam) {
     makeAutoObservable(this);
 
     this.setup();
@@ -18,6 +18,9 @@ export class GameState {
   setup() {
     // Right team should reverse its unit order
     this.rightTeam.units = this.rightTeam.units.reverse();
+
+    console.log("left team units", this.leftTeam.units);
+    console.log("right team units", this.rightTeam.units);
   }
 
   @action nextTurn() {
