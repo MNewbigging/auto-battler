@@ -17,7 +17,7 @@ export const UnitCard: React.FC<UnitCardProps> = observer(
         <div className="name">{unit.name}</div>
         <div>Health: {unit.health}</div>
         <div>Attack: {unit.attack}</div>
-        <div>Speed: {unit.activationSpeed}</div>
+        <div>Activates: {unit.activationSpeed}</div>
       </div>
     );
   }

@@ -26,11 +26,11 @@ export const GameScreen: React.FC<GameScreenProps> = observer(
 
         <div className="left-team-area">
           <h2 className="team-name bp4-heading">{gameState.leftTeam.name}</h2>
-          <UnitList units={gameState.leftTeam.units} />
+          <UnitList inGame units={gameState.leftTeam.units} />
         </div>
         <div className="right-team-area">
           <h2 className="team-name bp4-heading">{gameState.rightTeam.name}</h2>
-          <UnitList units={gameState.rightTeam.units} />
+          <UnitList inGame units={gameState.rightTeam.units} />
         </div>
       </div>
     );

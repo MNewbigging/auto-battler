@@ -1,9 +1,25 @@
-export class Unit {
-  name = "";
-  health = 0;
-  attack = 0;
-  activationSpeed = 1; // how often this unit activates
+// These appear on the card, are always these values
+export interface UnitDefaultProps {
+  name: string;
+  health: number;
+  attack: number;
+  activationSpeed: number;
+}
 
-  // In-game counters
-  activationCooldown = 1; // turns until this unit activates
+export class Unit implements UnitDefaultProps {
+  // Set from the default props
+  name: string;
+  health: number;
+  attack: number;
+  activationSpeed: number;
+  activationCooldown: number;
+
+  constructor(private defaultProps: UnitDefaultProps) {
+    // Init default values using props
+    this.name = defaultProps.name;
+    this.health = defaultProps.health;
+    this.attack = defaultProps.attack;
+    this.activationSpeed = defaultProps.activationSpeed;
+    this.activationCooldown = this.activationSpeed;
+  }
 }

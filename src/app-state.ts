@@ -2,7 +2,7 @@ import { DropResult } from "@hello-pangea/dnd";
 import { action, makeAutoObservable, observable } from "mobx";
 
 import { GameState } from "./game-state";
-import { Unit } from "./units/unit";
+import { Unit, UnitDefaultProps } from "./units/unit";
 import { createId } from "./utils/utils";
 import { createTeams, createUnits } from "./utils/unit-utils";
 
