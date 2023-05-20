@@ -2,8 +2,8 @@ import { DropResult } from "@hello-pangea/dnd";
 import { action, makeAutoObservable, observable } from "mobx";
 
 import { GameState } from "./game-state";
-import { Unit, UnitDefaultProps } from "./units/unit";
-import { createId } from "./utils/utils";
+import { Team } from "./units/team";
+import { Unit } from "./units/unit";
 import { createTeams, createUnits } from "./utils/unit-utils";
 
 export enum AppPage {
@@ -13,12 +13,6 @@ export enum AppPage {
   TEAMS = "teams",
   TEAM_BUILDER = "team-builder",
   GAME = "game",
-}
-
-export class Team {
-  readonly id = createId();
-
-  constructor(public name: string, public units: Unit[]) {}
 }
 
 export class AppState {

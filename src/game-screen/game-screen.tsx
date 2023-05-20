@@ -2,7 +2,7 @@ import "./game-screen.scss";
 
 import React from "react";
 import { Button } from "@blueprintjs/core";
-import { observer } from "mobx-react-lite";
+import { Observer, observer } from "mobx-react-lite";
 
 import { GameState } from "../game-state";
 import { UnitList } from "../unit-list/unit-list";
@@ -21,16 +21,18 @@ export const GameScreen: React.FC<GameScreenProps> = observer(
         </div>
 
         <div className="header">
-          <h1 className="bp4-heading">Turn 1</h1>
+          <Observer>
+            {() => <h1 className="bp4-heading">Turn {gameState.turn}</h1>}
+          </Observer>
         </div>
 
         <div className="left-team-area">
           <h2 className="team-name bp4-heading">{gameState.leftTeam.name}</h2>
-          <UnitList inGame units={gameState.leftTeam.units} />
+          <UnitList units={gameState.leftTeam.units} />
         </div>
         <div className="right-team-area">
           <h2 className="team-name bp4-heading">{gameState.rightTeam.name}</h2>
-          <UnitList inGame units={gameState.rightTeam.units} />
+          <UnitList units={gameState.rightTeam.units} />
         </div>
       </div>
     );

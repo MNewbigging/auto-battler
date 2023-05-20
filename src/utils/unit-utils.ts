@@ -1,4 +1,4 @@
-import { Team } from "../app-state";
+import { Team } from "../units/team";
 import { Unit } from "../units/unit";
 
 export function createUnits(): Unit[] {
