@@ -42,7 +42,8 @@ export const UnitCard: React.FC<UnitCardProps> = observer(
 
         <div
           className={healthClasses.join(" ")}
-          onAnimationEnd={() => {
+          onAnimationEnd={(e) => {
+            e.stopPropagation();
             unit.onUnitAnimEnd?.(UnitAnimation.ON_HIT);
             animationManager?.onAnimationEnd(
               `${unit.id}-${UnitAnimation.ON_HIT}`
@@ -56,7 +57,8 @@ export const UnitCard: React.FC<UnitCardProps> = observer(
 
         <div
           className={activationCooldownClasses.join(" ")}
-          onAnimationEnd={() => {
+          onAnimationEnd={(e) => {
+            e.stopPropagation();
             unit.onUnitAnimEnd?.(UnitAnimation.ACTIVATION_COOLDOWN);
             animationManager?.onAnimationEnd(
               `${unit.id}-${UnitAnimation.ACTIVATION_COOLDOWN}`

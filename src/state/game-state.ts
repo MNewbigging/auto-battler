@@ -73,6 +73,9 @@ export class GameState {
       return;
     }
 
+    console.log("left unit id: ", leftActiveUnit.id);
+    console.log("right unit id: ", rightActiveUnit.id);
+
     // After both units' activation animations are done, check for defeated units
     this.animationManager.onGroupEnd = () => this.defeatedUnitsCheck();
 
@@ -83,6 +86,7 @@ export class GameState {
 
     if (rightActiveUnit.shouldActivate) {
       this.activateUnit(rightActiveUnit, this.leftTeam);
+      console.log("right unit activated");
     }
   }
 
@@ -101,7 +105,9 @@ export class GameState {
 
     // Animate the target(s)
     for (const targetUnit of targets) {
-      this.animationManager.addToGroup([`${unit.id}-${UnitAnimation.ON_HIT}`]);
+      this.animationManager.addToGroup([
+        `${targetUnit.id}-${UnitAnimation.ON_HIT}`,
+      ]);
       targetUnit.onHitAnimating = true;
     }
 
@@ -110,6 +116,8 @@ export class GameState {
   }
 
   @action defeatedUnitsCheck() {
+    console.log("defeated units check");
+
     const leftActiveUnit = this.leftTeam.getActiveUnit();
     const rightActiveUnit = this.rightTeam.getActiveUnit();
 
