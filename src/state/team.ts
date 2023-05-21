@@ -20,20 +20,17 @@ export class GameTeam {
   @observable units: GameUnit[];
 
   constructor(public team: Team, public rightSide = false) {
-    makeObservable(this, {
-      units: observable,
-      destroyUnit: action,
-    });
+    makeAutoObservable(this);
 
     this.name = team.name;
 
     // Create the game units for this team
-    this.units = team.units.map(
-      (builtUnit) => new GameUnit(builtUnit.baseUnit)
-    );
+    this.units = team.units.map((builtUnit) => new GameUnit(builtUnit));
 
     // If this is a right-sided team, it should reverse its units
-    this.units = this.units.reverse();
+    if (this.rightSide) {
+      this.units = this.units.reverse();
+    }
   }
 
   getActiveUnit() {

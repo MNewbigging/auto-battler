@@ -1,12 +1,6 @@
-import {
-  action,
-  computed,
-  makeAutoObservable,
-  makeObservable,
-  observable,
-} from "mobx";
+import { action, computed, makeAutoObservable, observable } from "mobx";
 
-import { GameTeam, Team } from "./team";
+import { GameTeam } from "./team";
 
 // Base units are used in the roster
 export interface BaseUnit {
@@ -29,6 +23,7 @@ export class BuiltUnit implements BaseUnit {
   constructor(public baseUnit: BaseUnit) {
     makeAutoObservable(this);
 
+    // Props are initialised from the base unit values
     this.name = baseUnit.name;
     this.health = baseUnit.health;
     this.attack = baseUnit.attack;
@@ -37,23 +32,26 @@ export class BuiltUnit implements BaseUnit {
 }
 
 // A Game Unit exists during a game
-export class GameUnit extends BuiltUnit {
+export class GameUnit {
+  name: string;
+  @observable health: number;
+  @observable healthAnimating = false;
+  @observable attack: number;
+  @observable attackAnimating = false;
+  @observable activationSpeed: number;
+  @observable activationSpeedAnimating = false;
   @observable activationCooldown: number;
   @observable activationCooldownAnimating = false;
   @observable activationAnimating = false;
 
-  constructor(baseUnit: BaseUnit) {
-    super(baseUnit);
+  constructor(private builtUnit: BuiltUnit) {
+    makeAutoObservable(this);
 
-    makeObservable(this, {
-      activationCooldown: observable,
-      activationCooldownAnimating: observable,
-      activationAnimating: observable,
-      isAnimating: computed,
-      reduceActivationCooldown: action,
-      activate: action,
-    });
-
+    // Props are initialised from the built unit values
+    this.name = builtUnit.name;
+    this.health = builtUnit.health;
+    this.attack = builtUnit.attack;
+    this.activationSpeed = builtUnit.activationSpeed;
     this.activationCooldown = this.activationSpeed;
   }
 
