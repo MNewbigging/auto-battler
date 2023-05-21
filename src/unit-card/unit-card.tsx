@@ -28,6 +28,10 @@ export const UnitCard: React.FC<UnitCardProps> = observer(
       unit.activationCooldownAnimating ? UnitAnimation.ACTIVATION_COOLDOWN : "",
     ];
 
+    if (unit.name === "Shelly") {
+      console.log("shelly re-render, on-hit: " + unit.onHitAnimating);
+    }
+
     return (
       <div
         className={unitClasses.join(" ")}

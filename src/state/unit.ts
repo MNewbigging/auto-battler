@@ -66,6 +66,8 @@ export class GameUnit {
   @observable defeatAnimating = false;
   @observable onHitAnimating = false;
 
+  didActivate = false;
+
   constructor(private builtUnit: BuiltUnit) {
     makeAutoObservable(this);
 
@@ -114,6 +116,9 @@ export class GameUnit {
         break;
       case UnitAnimation.ON_HIT:
         this.onHitAnimating = false;
+        if (this.name === "Shelly") {
+          console.log("shelly on-hit reset to ", this.onHitAnimating);
+        }
         break;
       case UnitAnimation.DEFEATED:
         this.defeatAnimating = false;

@@ -14,7 +14,7 @@
   }
 
   &.defeated {
-    animation: fadeOut 1.5s linear;
+    animation: fadeOut 1.5s linear forwards;
   }
 
   .name {

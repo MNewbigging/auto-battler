@@ -117,6 +117,9 @@ export class GameState {
 
     // Reduce the activation steps count
     unit.activationSteps--;
+
+    // This unit has activated this turn
+    unit.didActivate = true;
   }
 
   postActivationCheck() {
@@ -129,12 +132,19 @@ export class GameState {
     // Reactivate
     if (leftActiveUnit.shouldActivate || rightActiveUnit.shouldActivate) {
       this.activationCheck();
-    } else {
-      // Reset activation steps and go to next turn
-      leftActiveUnit.resetAfterActivation();
-      rightActiveUnit.resetAfterActivation();
-      this.startNextTurn();
+
+      return;
     }
+
+    if (leftActiveUnit.didActivate) {
+      leftActiveUnit.resetAfterActivation();
+    }
+
+    if (rightActiveUnit.didActivate) {
+      rightActiveUnit.resetAfterActivation();
+    }
+
+    this.startNextTurn();
   }
 
   @action defeatedUnitsCheck() {
@@ -146,7 +156,7 @@ export class GameState {
       !this.rightTeam.hasDefeatedUnits()
     ) {
       // Go straight to post-activation check
-      this.postActivationCheck();
+      setTimeout(() => this.postActivationCheck(), 250);
     }
 
     // Get ids of all defeated units
