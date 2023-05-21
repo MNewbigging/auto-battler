@@ -1,3 +1,4 @@
+import { AnimationEvent } from "react";
 import {
   action,
   computed,
@@ -74,11 +75,18 @@ export class GameUnit {
     );
   }
 
-  @action reduceActivationCooldown() {
-    this.activationCooldown--;
-
-    this.activationCooldownAnimating = true;
+  get shouldActivate() {
+    return this.activationCooldown <= 0;
   }
+
+  @action reduceActivationCooldown = () => {
+    this.activationCooldown--;
+    this.activationCooldownAnimating = true;
+  };
+
+  @action onActivationCooldownAnimEnd = () => {
+    this.activationCooldownAnimating = false;
+  };
 
   @action activate(opponentTeam: GameTeam) {
     // Perform basic attack
@@ -87,5 +95,20 @@ export class GameUnit {
     activeTarget.health -= this.attack;
 
     this.activationAnimating = true;
+  }
+
+  @action onUnitAnimEnd = (e: AnimationEvent<HTMLDivElement>) => {
+    console.log(
+      "activation ended for " + this.name + " anim: " + e.animationName
+    );
+
+    if (e.animationName === "active") {
+      this.activationAnimating = false;
+    }
+  };
+
+  @action onAcivationComplete() {
+    // Reset values
+    this.activationCooldown = this.activationSpeed;
   }
 }

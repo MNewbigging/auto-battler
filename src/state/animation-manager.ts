@@ -12,17 +12,28 @@
  * for the consumer to flip any props that the animation requires.
  */
 
+import { createId } from "../utils/utils";
+
 export interface AnimationEvent {
   id: string; // id of this event, to be passed in onAnimEnd by component
   onStart: () => void; // called just before the animation property is flipped
   onEnd: () => void; // called when this event is finished
 }
 
+export interface AnimationEventGroup {
+  id: string;
+  events: AnimationEvent[];
+  onGroupEnd?: () => void;
+}
+
 export class AnimationManager {
   events: AnimationEvent[] = [];
+  eventGroups: AnimationEventGroup[] = [];
   animating = false;
 
-  scheduleAnimation(event: AnimationEvent) {
+  private onGroupEnd?: () => void;
+
+  playAnimation(event: AnimationEvent) {
     // Add the event to the queue
     this.events.push(event);
 
@@ -30,6 +41,17 @@ export class AnimationManager {
     if (!this.animating) {
       this.nextEvent();
     }
+  }
+
+  playParallelAnimations(events: AnimationEvent[], onGroupEnd?: () => void) {
+    // Add a group for these events
+    this.eventGroups.push({
+      id: createId(),
+      events,
+      onGroupEnd,
+    });
+
+    // These all start immediately (but should this wait for previous events to be done?)
   }
 
   // Comes from the react component onAnimationEnd for a particular object property
@@ -41,7 +63,7 @@ export class AnimationManager {
       return;
     }
 
-    // Fire onEnd callback
+    // Fire onEnd callbacks
     event.onEnd();
 
     // Remove the event
@@ -55,6 +77,10 @@ export class AnimationManager {
     if (!this.events.length) {
       // No longer animating
       this.animating = false;
+
+      // All events finished, fire callback if set then clear it
+      this.onGroupEnd?.();
+      this.onGroupEnd = undefined;
 
       return;
     }

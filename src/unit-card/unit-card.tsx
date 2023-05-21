@@ -4,15 +4,17 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { runInAction } from "mobx";
 
+import { AnimationManagerV2 } from "../state/animation-manager-v2";
 import { GameUnit } from "../state/unit";
 
 interface UnitCardProps {
   unit: Partial<GameUnit>;
+  animationManager?: AnimationManagerV2;
   onClick?: () => void;
 }
 
 export const UnitCard: React.FC<UnitCardProps> = observer(
-  ({ unit, onClick }) => {
+  ({ unit, onClick, animationManager }) => {
     const unitClasses = [
       "unit-card",
       unit.activationAnimating ? "active" : "",
@@ -28,9 +30,7 @@ export const UnitCard: React.FC<UnitCardProps> = observer(
       <div
         className={unitClasses.join(" ")}
         onClick={onClick}
-        onAnimationEnd={() =>
-          runInAction(() => (unit.activationAnimating = false))
-        }
+        onAnimationEnd={unit.onUnitAnimEnd}
       >
         <div className="name">{unit.name}</div>
 
@@ -48,7 +48,7 @@ export const UnitCard: React.FC<UnitCardProps> = observer(
         <div
           className={activeCooldownClasses.join(" ")}
           onAnimationEnd={() =>
-            runInAction(() => (unit.activationCooldownAnimating = false))
+            animationManager?.onAnimationEnd(`${unit.id}-cooldown`)
           }
         >
           Activates:{" "}

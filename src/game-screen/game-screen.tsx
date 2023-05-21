@@ -21,8 +21,6 @@ export const GameScreen: React.FC<GameScreenProps> = observer(
       gameState.turnAnimating ? "active" : "",
     ];
 
-    console.log("gmae-screen render", gameState.turnAnimating);
-
     return (
       <div className="game-screen">
         <div className="game-navbar">
@@ -48,7 +46,11 @@ export const GameScreen: React.FC<GameScreenProps> = observer(
           <h2 className="team-name bp4-heading">{gameState.leftTeam.name}</h2>
           <div className="team-unit-list">
             {gameState.leftTeam.units.map((unit, index) => (
-              <UnitCard key={`left-unit-${index}`} unit={unit} />
+              <UnitCard
+                key={`left-unit-${index}`}
+                unit={unit}
+                animationManager={gameState.animationManager}
+              />
             ))}
           </div>
         </div>
@@ -56,7 +58,11 @@ export const GameScreen: React.FC<GameScreenProps> = observer(
           <h2 className="team-name bp4-heading">{gameState.rightTeam.name}</h2>
           <div className="team-unit-list">
             {gameState.rightTeam.units.map((unit, index) => (
-              <UnitCard key={`right-unit-${index}`} unit={unit} />
+              <UnitCard
+                key={`right-unit-${index}`}
+                unit={unit}
+                animationManager={gameState.animationManager}
+              />
             ))}
           </div>
         </div>
