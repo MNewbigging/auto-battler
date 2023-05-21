@@ -58,9 +58,5 @@ export const App: React.FC<AppProps> = observer(({ appState }) => {
       break;
   }
 
-  return (
-    <div className="app">
-      <UnitCardV2 unit={appState.rosterUnits[1]} />
-    </div>
-  );
+  return <div className="app">{page}</div>;
 });

@@ -96,9 +96,20 @@ export const UnitCardV2: React.FC<UnitCardV2Props> = ({
           position="top"
           content="how many turns until this unit attacks"
         >
-          {unit.activationCooldown !== undefined
-            ? unit.activationCooldown
-            : unit.activationSpeed}
+          <div
+            className="content"
+            onAnimationEnd={(e) => {
+              e.stopPropagation();
+              unit.onUnitAnimEnd?.(UnitAnimation.ACTIVATION_COOLDOWN);
+              animationManager?.onAnimationEnd(
+                `${unit.id}-${UnitAnimation.ACTIVATION_COOLDOWN}`
+              );
+            }}
+          >
+            {unit.activationCooldown !== undefined
+              ? unit.activationCooldown
+              : unit.activationSpeed}
+          </div>
         </Tooltip2>
       </div>
 

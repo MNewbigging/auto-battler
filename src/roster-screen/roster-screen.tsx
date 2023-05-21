@@ -4,7 +4,7 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 
 import { AppPage, AppState } from "../state/app-state";
-import { UnitCard } from "../unit-card/unit-card";
+import { UnitCardV2 } from "../unit-card/unit-card-v2";
 
 interface RosterScreenProps {
   appState: AppState;
@@ -18,7 +18,7 @@ export const RosterScreen: React.FC<RosterScreenProps> = observer(
 
         <div className="roster-list">
           {appState.rosterUnits.map((unit, index) => (
-            <UnitCard key={`unit-${index}`} unit={unit} />
+            <UnitCardV2 key={`unit-${index}`} unit={unit} />
           ))}
         </div>
 
