@@ -4,6 +4,8 @@
 @import "@blueprintjs/select/lib/css/blueprint-select.css";
 @import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
 body {
   margin: 0;
   padding: 0;
@@ -13,6 +15,7 @@ body {
 html {
   box-sizing: border-box;
   overflow: hidden;
+  font-family: "Poppins", sans-serif;
 }
 
 *::before,

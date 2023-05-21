@@ -10,6 +10,7 @@ import { PlayScreen } from "./play-screen/play-screen";
 import { RosterScreen } from "./roster-screen/roster-screen";
 import { TeamBuilderScreen } from "./team-builder-screen/team-builder-screen";
 import { TeamsScreen } from "./teams-screen/teams-screen";
+import { UnitCardV2 } from "./unit-card/unit-card-v2";
 
 interface AppProps {
   appState: AppState;
@@ -57,5 +58,9 @@ export const App: React.FC<AppProps> = observer(({ appState }) => {
       break;
   }
 
-  return <div className="app">{page}</div>;
+  return (
+    <div className="app">
+      <UnitCardV2 unit={appState.rosterUnits[1]} />
+    </div>
+  );
 });

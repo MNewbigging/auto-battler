@@ -116,9 +116,6 @@ export class GameUnit {
         break;
       case UnitAnimation.ON_HIT:
         this.onHitAnimating = false;
-        if (this.name === "Shelly") {
-          console.log("shelly on-hit reset to ", this.onHitAnimating);
-        }
         break;
       case UnitAnimation.DEFEATED:
         this.defeatAnimating = false;
