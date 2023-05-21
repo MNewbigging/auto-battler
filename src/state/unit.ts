@@ -82,11 +82,6 @@ export class GameUnit {
     return this.activationCooldown <= 0 && this.activationSteps > 0;
   }
 
-  @action reduceActivationCooldown = () => {
-    this.activationCooldown--;
-    this.activationCooldownAnimating = true;
-  };
-
   getActivationTargets(opposingTeam: GameTeam): GameUnit[] {
     // Returns the units that this unit targets during its activation
     return [opposingTeam.getActiveUnit()];

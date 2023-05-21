@@ -2,7 +2,6 @@ import "./unit-card.scss";
 
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { runInAction } from "mobx";
 
 import { AnimationManager } from "../state/animation-manager";
 import { GameUnit, UnitAnimation } from "../state/unit";
@@ -32,7 +31,7 @@ export const UnitCard: React.FC<UnitCardProps> = observer(
       <div
         className={unitClasses.join(" ")}
         onClick={onClick}
-        onAnimationEnd={(e) => {
+        onAnimationEnd={() => {
           unit.onUnitAnimEnd?.(UnitAnimation.ACTIVATION);
           animationManager?.onAnimationEnd(
             `${unit.id}-${UnitAnimation.ACTIVATION}`
@@ -57,7 +56,7 @@ export const UnitCard: React.FC<UnitCardProps> = observer(
 
         <div
           className={activationCooldownClasses.join(" ")}
-          onAnimationEnd={(e) => {
+          onAnimationEnd={() => {
             unit.onUnitAnimEnd?.(UnitAnimation.ACTIVATION_COOLDOWN);
             animationManager?.onAnimationEnd(
               `${unit.id}-${UnitAnimation.ACTIVATION_COOLDOWN}`

@@ -6,25 +6,67 @@
  * There can only be one set of registered ids at any time - registering clears any existing ids.
  */
 
+export type AnimationEndCallback = () => void;
+
 export class AnimationManager {
-  animationIds: string[] = [];
-  onEnd?: () => void;
+  // For listening for a group of animations to all finish
+  groupAnimationIds: string[] = [];
+  onGroupEnd?: AnimationEndCallback;
 
-  registerAnimationIds(ids: string[], onEnd: () => void) {
-    this.animationIds = ids;
-    this.onEnd = onEnd;
+  // For listening to individual animations
+  onceCallbacks = new Map<string, AnimationEndCallback[]>();
+
+  // Once this animation occurs, the callback is fired once and then removed
+  onOnce(animationId: string, callback: AnimationEndCallback) {
+    const existing = this.onceCallbacks.get(animationId) ?? [];
+    existing.push(callback);
+    this.onceCallbacks.set(animationId, existing);
   }
 
-  pushAnimationIds(ids: string[]) {
-    ids.forEach((id) => this.animationIds.push(id));
+  off(animationId: string, callback: AnimationEndCallback) {
+    let existing = this.onceCallbacks.get(animationId);
+    if (!existing) {
+      return;
+    }
+
+    existing = existing.filter((cb) => cb !== callback);
+    this.onceCallbacks.set(animationId, existing);
   }
 
+  onGroup(animationIds: string[], onGroupEnd: AnimationEndCallback) {
+    this.groupAnimationIds = animationIds;
+    this.onGroupEnd = onGroupEnd;
+  }
+
+  addToGroup(ids: string[]) {
+    ids.forEach((id) => this.groupAnimationIds.push(id));
+  }
+
+  // Called by all react components that animate when an animation finishes
   onAnimationEnd(animationId: string) {
-    this.animationIds = this.animationIds.filter((id) => id !== animationId);
+    // Get any listeners for this animation
+    const onceCallbacks = this.onceCallbacks.get(animationId);
+    if (onceCallbacks?.length) {
+      // Fire all listeners
+      onceCallbacks.forEach((cb) => cb());
+      // Then delete them
+      this.onceCallbacks.delete(animationId);
+    }
 
-    if (!this.animationIds.length) {
-      // All registered animations have finished
-      this.onEnd?.();
+    // Check for group listeners
+    if (!this.groupAnimationIds.includes(animationId)) {
+      return;
+    }
+
+    // Remove the id from the registered list
+    this.groupAnimationIds = this.groupAnimationIds.filter(
+      (id) => id !== animationId
+    );
+
+    // If all registered animations have finished, fire callback
+    if (!this.groupAnimationIds.length) {
+      this.onGroupEnd?.();
+      this.onGroupEnd = undefined;
     }
   }
 }
