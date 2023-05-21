@@ -82,6 +82,10 @@ export class GameUnit {
     return this.activationCooldown <= 0 && this.activationSteps > 0;
   }
 
+  get defeated() {
+    return this.health <= 0;
+  }
+
   getActivationTargets(opposingTeam: GameTeam): GameUnit[] {
     // Returns the units that this unit targets during its activation
     return [opposingTeam.getActiveUnit()];
@@ -93,6 +97,11 @@ export class GameUnit {
       // Basic attack
       targetUnit.health -= this.attack;
     }
+  }
+
+  @action resetAfterActivation() {
+    this.activationSteps = this.builtUnit.activationSteps;
+    this.activationCooldown = this.builtUnit.activationSpeed;
   }
 
   @action onUnitAnimEnd = (anim: UnitAnimation) => {

@@ -66,7 +66,6 @@ export class AnimationManager {
     // If all registered animations have finished, fire callback
     if (!this.groupAnimationIds.length) {
       this.onGroupEnd?.();
-      this.onGroupEnd = undefined;
     }
   }
 }

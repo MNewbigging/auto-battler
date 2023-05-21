@@ -33,8 +33,16 @@ export class GameTeam {
     }
   }
 
+  get defeated() {
+    return this.units.length === 0;
+  }
+
   getActiveUnit() {
     return this.rightSide ? this.units[0] : this.units[this.units.length - 1];
+  }
+
+  hasDefeatedUnits() {
+    return this.units.some((unit) => unit.defeated);
   }
 
   @action destroyUnit(unit: GameUnit) {

@@ -17,6 +17,7 @@ export const UnitCard: React.FC<UnitCardProps> = observer(
     const unitClasses = [
       "unit-card",
       unit.activationAnimating ? UnitAnimation.ACTIVATION : "",
+      unit.defeatAnimating ? UnitAnimation.DEFEATED : "",
     ];
     const healthClasses = [
       "health",
@@ -31,11 +32,15 @@ export const UnitCard: React.FC<UnitCardProps> = observer(
       <div
         className={unitClasses.join(" ")}
         onClick={onClick}
-        onAnimationEnd={() => {
-          unit.onUnitAnimEnd?.(UnitAnimation.ACTIVATION);
-          animationManager?.onAnimationEnd(
-            `${unit.id}-${UnitAnimation.ACTIVATION}`
-          );
+        onAnimationEnd={(e) => {
+          // Temporary while this one node has multiple potential anims
+          let anim =
+            e.animationName === "pulse"
+              ? UnitAnimation.ACTIVATION
+              : UnitAnimation.DEFEATED;
+
+          unit.onUnitAnimEnd?.(anim);
+          animationManager?.onAnimationEnd(`${unit.id}-${anim}`);
         }}
       >
         <div className="name">{unit.name}</div>

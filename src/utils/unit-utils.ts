@@ -1,5 +1,4 @@
 import { BaseUnit } from "../state/unit";
-import { Team } from "../state/team";
 import { TeamBuilderState } from "../state/team-builder-state";
 
 export function createRosterUnits(): BaseUnit[] {
@@ -15,8 +14,8 @@ export function createRosterUnits(): BaseUnit[] {
     name: "Stickler",
     health: 1,
     attack: 1,
-    activationSpeed: 1,
-    activationSteps: 1,
+    activationSpeed: 2,
+    activationSteps: 3,
   };
 
   const bomber: BaseUnit = {

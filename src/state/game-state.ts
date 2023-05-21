@@ -24,6 +24,8 @@ export class GameState {
   }
 
   startNextTurn() {
+    console.log("starting next turn");
+
     // When turn timer animation has finished
     this.animationManager.onOnce("turn-timer", () =>
       runInAction(() => {
@@ -38,6 +40,8 @@ export class GameState {
   }
 
   reduceUnitCooldowns() {
+    console.log("reduce unit cooldowns");
+
     const leftActiveUnit = this.leftTeam.getActiveUnit();
     const rightActiveUnit = this.rightTeam.getActiveUnit();
 
@@ -62,6 +66,8 @@ export class GameState {
   }
 
   @action activationCheck() {
+    console.log("activation check");
+
     const leftActiveUnit = this.leftTeam.getActiveUnit();
     const rightActiveUnit = this.rightTeam.getActiveUnit();
 
@@ -73,9 +79,6 @@ export class GameState {
       return;
     }
 
-    console.log("left unit id: ", leftActiveUnit.id);
-    console.log("right unit id: ", rightActiveUnit.id);
-
     // After both units' activation animations are done, check for defeated units
     this.animationManager.onGroupEnd = () => this.defeatedUnitsCheck();
 
@@ -86,11 +89,12 @@ export class GameState {
 
     if (rightActiveUnit.shouldActivate) {
       this.activateUnit(rightActiveUnit, this.leftTeam);
-      console.log("right unit activated");
     }
   }
 
   @action activateUnit(unit: GameUnit, opposingTeam: GameTeam) {
+    console.log("activating unit " + unit.name);
+
     // Get the targets of this unit's activation
     const targets = unit.getActivationTargets(opposingTeam);
 
@@ -115,24 +119,87 @@ export class GameState {
     unit.activationSteps--;
   }
 
-  @action defeatedUnitsCheck() {
-    console.log("defeated units check");
+  postActivationCheck() {
+    console.log("post activation check");
 
+    // Occurs after an activation, checks to see if re-activating is necessary
     const leftActiveUnit = this.leftTeam.getActiveUnit();
     const rightActiveUnit = this.rightTeam.getActiveUnit();
 
-    // If a unit is destroyed, it animates out & then is removed from the team
-    if (leftActiveUnit.health <= 0) {
-      leftActiveUnit.defeatAnimating = true;
-    }
-
-    if (rightActiveUnit.health <= 0) {
-      rightActiveUnit.defeatAnimating = true;
+    // Reactivate
+    if (leftActiveUnit.shouldActivate || rightActiveUnit.shouldActivate) {
+      this.activationCheck();
+    } else {
+      // Reset activation steps and go to next turn
+      leftActiveUnit.resetAfterActivation();
+      rightActiveUnit.resetAfterActivation();
+      this.startNextTurn();
     }
   }
 
-  postActivateCheck() {
-    // Check if any unit still has activation steps, re-run activate step if so
-    // Otherwise, reset values and head to next turn
+  @action defeatedUnitsCheck() {
+    console.log("defeated units check");
+
+    // If nothing is destroyed
+    if (
+      !this.leftTeam.hasDefeatedUnits() &&
+      !this.rightTeam.hasDefeatedUnits()
+    ) {
+      // Go straight to post-activation check
+      this.postActivationCheck();
+    }
+
+    // Get ids of all defeated units
+    const defeatedUnits: GameUnit[] = [];
+
+    this.leftTeam.units.forEach((leftUnit) => {
+      if (leftUnit.defeated) {
+        defeatedUnits.push(leftUnit);
+      }
+    });
+
+    this.rightTeam.units.forEach((rightUnit) => {
+      if (rightUnit.defeated) {
+        defeatedUnits.push(rightUnit);
+      }
+    });
+
+    // When all have finished their defeat animation, move units up queue
+    const animIds = defeatedUnits.map(
+      (unit) => `${unit.id}-${UnitAnimation.DEFEATED}`
+    );
+    this.animationManager.onGroup(animIds, () =>
+      this.destroyUnits(defeatedUnits)
+    );
+
+    // Start defeat animations
+    for (const defeatedUnit of defeatedUnits) {
+      defeatedUnit.defeatAnimating = true;
+    }
+  }
+
+  destroyUnits(units: GameUnit[]) {
+    console.log(
+      "destroying units ",
+      units.map((u) => u.name)
+    );
+
+    units.forEach((unit) => {
+      // Not sure which team this unit is in, but it's a no-op if it's the wrong team here
+      this.leftTeam.destroyUnit(unit);
+      this.rightTeam.destroyUnit(unit);
+    });
+
+    // Is this game over?
+    if (this.leftTeam.defeated || this.rightTeam.defeated) {
+      console.log("game over!!");
+
+      return;
+    }
+
+    // Wait until any queue-moving animations stop...
+
+    // Then check if we should re-activate
+    this.postActivationCheck();
   }
 }
