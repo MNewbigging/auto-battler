@@ -1,6 +1,13 @@
-import { action, computed, makeAutoObservable, observable } from "mobx";
+import {
+  action,
+  computed,
+  makeAutoObservable,
+  observable,
+  reaction,
+} from "mobx";
 
 import { GameTeam } from "./team";
+import { createId } from "../utils/utils";
 
 // Base units are used in the roster
 export interface BaseUnit {
@@ -33,6 +40,7 @@ export class BuiltUnit implements BaseUnit {
 
 // A Game Unit exists during a game
 export class GameUnit {
+  readonly id = createId();
   name: string;
   @observable health: number;
   @observable healthAnimating = false;
@@ -43,6 +51,7 @@ export class GameUnit {
   @observable activationCooldown: number;
   @observable activationCooldownAnimating = false;
   @observable activationAnimating = false;
+  @observable defeatAnimating = false;
 
   constructor(private builtUnit: BuiltUnit) {
     makeAutoObservable(this);
@@ -57,9 +66,11 @@ export class GameUnit {
 
   @computed isAnimating() {
     return (
-      this.healthAnimating &&
-      this.activationAnimating &&
-      this.activationCooldownAnimating
+      this.healthAnimating ||
+      this.attackAnimating ||
+      this.activationCooldownAnimating ||
+      this.activationAnimating ||
+      this.defeatAnimating
     );
   }
 

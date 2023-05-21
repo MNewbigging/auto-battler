@@ -37,12 +37,15 @@ export class GameTeam {
     return this.rightSide ? this.units[0] : this.units[this.units.length - 1];
   }
 
-  @action destroyUnit(unit: BuiltUnit) {
+  @action destroyUnit(unit: GameUnit) {
     const unitIndex = this.units.findIndex((u) => u.name === unit.name);
     if (unitIndex < 0) {
       return;
     }
 
-    this.units.splice(unitIndex, 1);
+    unit.defeatAnimating = true;
+
+    // Remove when animating is finished
+    setTimeout(() => this.units.splice(unitIndex, 1), 1600);
   }
 }

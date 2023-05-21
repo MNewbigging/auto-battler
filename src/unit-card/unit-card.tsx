@@ -13,7 +13,11 @@ interface UnitCardProps {
 
 export const UnitCard: React.FC<UnitCardProps> = observer(
   ({ unit, onClick }) => {
-    const unitClasses = ["unit-card", unit.activationAnimating ? "active" : ""];
+    const unitClasses = [
+      "unit-card",
+      unit.activationAnimating ? "active" : "",
+      unit.defeatAnimating ? "defeated" : "",
+    ];
     const healthClasses = ["health", unit.healthAnimating ? "active" : ""];
     const activeCooldownClasses = [
       "cooldown",

@@ -13,6 +13,10 @@
     animation: pulse 0.5s linear;
   }
 
+  &.defeated {
+    animation: fadeOut 1.5s linear;
+  }
+
   .name {
     font-weight: bold;
   }
@@ -39,5 +43,14 @@
   }
   100% {
     transform: scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }

@@ -3,6 +3,7 @@ import "./game-screen.scss";
 import React from "react";
 import { Button } from "@blueprintjs/core";
 import { Observer, observer } from "mobx-react-lite";
+import { runInAction } from "mobx";
 
 import { GameState } from "../state/game-state";
 import { UnitCard } from "../unit-card/unit-card";
@@ -20,6 +21,8 @@ export const GameScreen: React.FC<GameScreenProps> = observer(
       gameState.turnAnimating ? "active" : "",
     ];
 
+    console.log("gmae-screen render", gameState.turnAnimating);
+
     return (
       <div className="game-screen">
         <div className="game-navbar">
@@ -29,7 +32,14 @@ export const GameScreen: React.FC<GameScreenProps> = observer(
         <div className="header">
           <Observer>
             {() => (
-              <h1 className={turnClasses.join(" ")}>Turn {gameState.turn}</h1>
+              <h1
+                className={turnClasses.join(" ")}
+                onAnimationEnd={() =>
+                  gameState.animationManager.onAnimationEnd("turn-timer")
+                }
+              >
+                Turn {gameState.turn}
+              </h1>
             )}
           </Observer>
         </div>
