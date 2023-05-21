@@ -6,10 +6,8 @@ import {
   runInAction,
 } from "mobx";
 
-import { AnimationEvent, AnimationManager } from "./animation-manager";
 import { AnimationManagerV2 } from "./animation-manager-v2";
 import { GameTeam } from "./team";
-import { GameUnit } from "./unit";
 
 export class GameState {
   @observable turn = 0;

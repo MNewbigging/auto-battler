@@ -16,6 +16,7 @@ export interface BaseUnit {
   health: number;
   attack: number;
   activationSpeed: number;
+  activationSteps: number;
 }
 
 // A Built Unit exists in a team
@@ -27,6 +28,7 @@ export class BuiltUnit implements BaseUnit {
   @observable attackAnimating = false;
   @observable activationSpeed: number;
   @observable activationSpeedAnimating = false;
+  @observable activationSteps: number;
 
   constructor(public baseUnit: BaseUnit) {
     makeAutoObservable(this);
@@ -36,6 +38,7 @@ export class BuiltUnit implements BaseUnit {
     this.health = baseUnit.health;
     this.attack = baseUnit.attack;
     this.activationSpeed = baseUnit.activationSpeed;
+    this.activationSteps = baseUnit.activationSteps;
   }
 }
 
@@ -52,6 +55,7 @@ export class GameUnit {
   @observable activationCooldown: number;
   @observable activationCooldownAnimating = false;
   @observable activationAnimating = false;
+  @observable activationSteps: number;
   @observable defeatAnimating = false;
 
   constructor(private builtUnit: BuiltUnit) {
@@ -63,6 +67,7 @@ export class GameUnit {
     this.attack = builtUnit.attack;
     this.activationSpeed = builtUnit.activationSpeed;
     this.activationCooldown = this.activationSpeed;
+    this.activationSteps = builtUnit.activationSteps;
   }
 
   @computed isAnimating() {
@@ -93,15 +98,9 @@ export class GameUnit {
     const activeTarget = opponentTeam.getActiveUnit();
 
     activeTarget.health -= this.attack;
-
-    this.activationAnimating = true;
   }
 
   @action onUnitAnimEnd = (e: AnimationEvent<HTMLDivElement>) => {
-    console.log(
-      "activation ended for " + this.name + " anim: " + e.animationName
-    );
-
     if (e.animationName === "active") {
       this.activationAnimating = false;
     }

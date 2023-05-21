@@ -8,6 +8,7 @@ export function createRosterUnits(): BaseUnit[] {
     health: 3,
     attack: 3,
     activationSpeed: 3,
+    activationSteps: 1,
   };
 
   const stickler: BaseUnit = {
@@ -15,6 +16,7 @@ export function createRosterUnits(): BaseUnit[] {
     health: 1,
     attack: 1,
     activationSpeed: 1,
+    activationSteps: 1,
   };
 
   const bomber: BaseUnit = {
@@ -22,6 +24,7 @@ export function createRosterUnits(): BaseUnit[] {
     health: 2,
     attack: 5,
     activationSpeed: 5,
+    activationSteps: 1,
   };
 
   const shelly: BaseUnit = {
@@ -29,6 +32,7 @@ export function createRosterUnits(): BaseUnit[] {
     health: 6,
     attack: 1,
     activationSpeed: 3,
+    activationSteps: 1,
   };
 
   return [bludger, stickler, bomber, shelly];
@@ -37,14 +41,14 @@ export function createRosterUnits(): BaseUnit[] {
 export function createTeams() {
   const allUnits = createRosterUnits();
 
-  let tbs = new TeamBuilderState();
+  let tbs = new TeamBuilderState(allUnits);
 
   tbs.teamName = "Team 1";
   const team1Units = allUnits.slice(0, 4);
   team1Units.forEach((unit) => tbs.addUnitToTeam(unit));
   const team1 = tbs.getTeam();
 
-  tbs = new TeamBuilderState();
+  tbs = new TeamBuilderState(allUnits);
 
   tbs.teamName = "Team 2";
   const team2Units = allUnits.slice(0, 4).reverse();
