@@ -4,12 +4,12 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { runInAction } from "mobx";
 
-import { AnimationManagerV2 } from "../state/animation-manager-v2";
-import { GameUnit } from "../state/unit";
+import { AnimationManager } from "../state/animation-manager";
+import { GameUnit, UnitAnimation } from "../state/unit";
 
 interface UnitCardProps {
   unit: Partial<GameUnit>;
-  animationManager?: AnimationManagerV2;
+  animationManager?: AnimationManager;
   onClick?: () => void;
 }
 
@@ -17,28 +17,38 @@ export const UnitCard: React.FC<UnitCardProps> = observer(
   ({ unit, onClick, animationManager }) => {
     const unitClasses = [
       "unit-card",
-      unit.activationAnimating ? "active" : "",
-      unit.defeatAnimating ? "defeated" : "",
+      unit.activationAnimating ? UnitAnimation.ACTIVATION : "",
     ];
-    const healthClasses = ["health", unit.healthAnimating ? "active" : ""];
-    const activeCooldownClasses = [
+    const healthClasses = [
+      "health",
+      unit.onHitAnimating ? UnitAnimation.ON_HIT : "",
+    ];
+    const activationCooldownClasses = [
       "cooldown",
-      unit.activationCooldownAnimating ? "active" : "",
+      unit.activationCooldownAnimating ? UnitAnimation.ACTIVATION_COOLDOWN : "",
     ];
 
     return (
       <div
         className={unitClasses.join(" ")}
         onClick={onClick}
-        onAnimationEnd={unit.onUnitAnimEnd}
+        onAnimationEnd={(e) => {
+          unit.onUnitAnimEnd?.(UnitAnimation.ACTIVATION);
+          animationManager?.onAnimationEnd(
+            `${unit.id}-${UnitAnimation.ACTIVATION}`
+          );
+        }}
       >
         <div className="name">{unit.name}</div>
 
         <div
           className={healthClasses.join(" ")}
-          onAnimationEnd={() =>
-            runInAction(() => (unit.healthAnimating = false))
-          }
+          onAnimationEnd={() => {
+            unit.onUnitAnimEnd?.(UnitAnimation.ON_HIT);
+            animationManager?.onAnimationEnd(
+              `${unit.id}-${UnitAnimation.ON_HIT}`
+            );
+          }}
         >
           Health: {unit.health}
         </div>
@@ -46,10 +56,13 @@ export const UnitCard: React.FC<UnitCardProps> = observer(
         <div>Attack: {unit.attack}</div>
 
         <div
-          className={activeCooldownClasses.join(" ")}
-          onAnimationEnd={() =>
-            animationManager?.onAnimationEnd(`${unit.id}-cooldown`)
-          }
+          className={activationCooldownClasses.join(" ")}
+          onAnimationEnd={(e) => {
+            unit.onUnitAnimEnd?.(UnitAnimation.ACTIVATION_COOLDOWN);
+            animationManager?.onAnimationEnd(
+              `${unit.id}-${UnitAnimation.ACTIVATION_COOLDOWN}`
+            );
+          }}
         >
           Activates:{" "}
           {unit.activationCooldown !== undefined

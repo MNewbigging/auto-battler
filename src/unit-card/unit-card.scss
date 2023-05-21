@@ -9,7 +9,7 @@
   align-items: center;
   gap: 5px;
 
-  &.active {
+  &.activation {
     animation: pulse 0.5s linear;
   }
 
@@ -22,13 +22,14 @@
   }
 
   .health {
-    &.active {
-      animation: pulse 0.5s linear;
+    &.on-hit {
+      animation: onHit 0.5s linear;
+      animation-delay: 0.3s;
     }
   }
 
   .cooldown {
-    &.active {
+    &.activation-cooldown {
       animation: pulse 0.5s linear;
     }
   }
@@ -52,5 +53,17 @@
   }
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes onHit {
+  0% {
+    background-color: white;
+  }
+  50% {
+    background-color: rgb(251, 46, 46);
+  }
+  100% {
+    background-color: white;
   }
 }

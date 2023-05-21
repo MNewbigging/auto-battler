@@ -6,20 +6,21 @@ import {
   runInAction,
 } from "mobx";
 
-import { AnimationManagerV2 } from "./animation-manager-v2";
+import { AnimationManager } from "./animation-manager";
 import { GameTeam } from "./team";
+import { GameUnit, UnitAnimation } from "./unit";
 
 export class GameState {
   @observable turn = 0;
   @observable turnAnimating = false;
 
-  animationManager = new AnimationManagerV2();
+  animationManager = new AnimationManager();
 
   constructor(public leftTeam: GameTeam, public rightTeam: GameTeam) {
     makeAutoObservable(this);
 
     // Start after entry animations have finished
-    setTimeout(() => this.startNextTurn(), 2000);
+    setTimeout(() => this.startNextTurn(), 1500);
   }
 
   startNextTurn() {
@@ -45,12 +46,11 @@ export class GameState {
 
     // Register ids for cooldown anims and provide onEnd for next step
     this.animationManager.registerAnimationIds(
-      [`${leftActiveUnit.id}-cooldown`, `${rightActiveUnit.id}-cooldown`],
+      [
+        `${leftActiveUnit.id}-${UnitAnimation.ACTIVATION_COOLDOWN}`,
+        `${rightActiveUnit.id}-${UnitAnimation.ACTIVATION_COOLDOWN}`,
+      ],
       () => {
-        // No longer animating
-        leftActiveUnit.onActivationCooldownAnimEnd();
-        rightActiveUnit.onActivationCooldownAnimEnd();
-
         // Go to next step
         this.activationCheck();
       }
@@ -65,155 +65,44 @@ export class GameState {
     const leftActiveUnit = this.leftTeam.getActiveUnit();
     const rightActiveUnit = this.rightTeam.getActiveUnit();
 
-    // Start any activation animations
+    // If nothing should activate, go to the next turn
+    if (!leftActiveUnit.shouldActivate && !rightActiveUnit.shouldActivate) {
+      this.startNextTurn();
+    }
+
+    // Otherwise activate valid units
     if (leftActiveUnit.shouldActivate) {
-      leftActiveUnit.activationAnimating = true;
+      this.activateUnit(leftActiveUnit, this.rightTeam);
     }
 
     if (rightActiveUnit.shouldActivate) {
-      rightActiveUnit.activationAnimating = true;
+      this.activateUnit(rightActiveUnit, this.leftTeam);
     }
 
-    // Nothing activates
-    if (!leftActiveUnit.shouldActivate && !rightActiveUnit.shouldActivate) {
-      // Next turn
-      this.startNextTurn();
-    }
+    // When this activation step is done, check for any more steps this turn
   }
 
-  @action nextTurn() {
-    console.log("starting turn" + this.turn);
+  @action activateUnit(unit: GameUnit, opposingTeam: GameTeam) {
+    // Get the targets of this unit's activation
+    const targets = unit.getActivationTargets(opposingTeam);
 
-    // Reduce activation times of active units
-    const leftActiveUnit = this.leftTeam.getActiveUnit();
-    const rightActiveUnit = this.rightTeam.getActiveUnit();
+    // Activate against those targets
+    unit.activate(targets);
 
-    leftActiveUnit.reduceActivationCooldown();
-    rightActiveUnit.reduceActivationCooldown();
+    // After all animations, check for any destroyed units after this attack
+    const animIds = [`${unit.id}-activation`];
 
-    // If cooldown is 0, activate the unit
-    if (leftActiveUnit.activationCooldown <= 0) {
-      // Activate
-      leftActiveUnit.activate(this.rightTeam);
+    // Animate this unit's activation
+    unit.activationAnimating = true;
 
-      // Reset cooldown
-      leftActiveUnit.activationCooldown = leftActiveUnit.activationSpeed;
+    // Animate the target(s)
+    for (const targetUnit of targets) {
+      targetUnit.onHitAnimating = true;
     }
 
-    if (rightActiveUnit.activationCooldown <= 0) {
-      // Activate
-      rightActiveUnit.activate(this.leftTeam);
-
-      // Reset cooldown
-      rightActiveUnit.activationCooldown = rightActiveUnit.activationSpeed;
-    }
-
-    // After both units are given a chance to activate, clear any defeated units
-    if (leftActiveUnit.health <= 0) {
-      this.leftTeam.destroyUnit(leftActiveUnit);
-    }
-
-    if (rightActiveUnit.health <= 0) {
-      this.rightTeam.destroyUnit(rightActiveUnit);
-    }
-
-    // Is the game over?
-    if (!this.leftTeam.units.length || !this.rightTeam.units.length) {
-      console.log("game over!");
-
-      return;
-    }
-
-    // Once all animations for this turn have stopped, go to next turn
-    autorun(() => {
-      if (leftActiveUnit.isAnimating() || rightActiveUnit.isAnimating()) {
-        return;
-      }
-
-      setTimeout(() => runInAction(() => this.startNextTurn()), 500);
-    });
+    // Reduce the activation steps count
+    unit.activationSteps--;
   }
 
-  private incTurnTimer() {
-    // On the next turn
-    this.turn++;
-
-    // Animate the increase in turn
-    this.turnAnimating = true;
-  }
-
-  private onTurnTimerAnimEnd = () => {
-    // No longer animating
-    this.turnAnimating = false;
-
-    // Ready for next step now that anim is done
-    this.reduceActiveUnitCooldowns();
-  };
-
-  private reduceActiveUnitCooldowns() {
-    const left = this.leftTeam.getActiveUnit();
-    const right = this.rightTeam.getActiveUnit();
-
-    left.activationCooldown--;
-    right.activationCooldown--;
-
-    // Both units animate at the same time
-    left.activationCooldownAnimating = true;
-    right.activationCooldownAnimating = true;
-  }
-
-  /*
-  @action nextTurn() {
-    console.log("starting turn" + this.turn);
-
-    // Reduce activation times of active units
-    const leftActiveUnit = this.leftTeam.getActiveUnit();
-    const rightActiveUnit = this.rightTeam.getActiveUnit();
-
-    leftActiveUnit.reduceActivationCooldown();
-    rightActiveUnit.reduceActivationCooldown();
-
-    // If cooldown is 0, activate the unit
-    if (leftActiveUnit.activationCooldown <= 0) {
-      // Activate
-      leftActiveUnit.activate(this.rightTeam);
-
-      // Reset cooldown
-      leftActiveUnit.activationCooldown = leftActiveUnit.activationSpeed;
-    }
-
-    if (rightActiveUnit.activationCooldown <= 0) {
-      // Activate
-      rightActiveUnit.activate(this.leftTeam);
-
-      // Reset cooldown
-      rightActiveUnit.activationCooldown = rightActiveUnit.activationSpeed;
-    }
-
-    // After both units are given a chance to activate, clear any defeated units
-    if (leftActiveUnit.health <= 0) {
-      this.leftTeam.destroyUnit(leftActiveUnit);
-    }
-
-    if (rightActiveUnit.health <= 0) {
-      this.rightTeam.destroyUnit(rightActiveUnit);
-    }
-
-    // Is the game over?
-    if (!this.leftTeam.units.length || !this.rightTeam.units.length) {
-      console.log("game over!");
-
-      return;
-    }
-
-    // Once all animations for this turn have stopped, go to next turn
-    autorun(() => {
-      if (leftActiveUnit.isAnimating() || rightActiveUnit.isAnimating()) {
-        return;
-      }
-
-      setTimeout(() => runInAction(() => this.increaseTurnTimer()), 500);
-    });
-  }
-*/
+  destroyedUnitsCheck() {}
 }
