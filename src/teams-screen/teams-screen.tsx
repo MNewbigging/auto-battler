@@ -1,10 +1,12 @@
 import "./teams-screen.scss";
 
 import React from "react";
+import { Button, Intent } from "@blueprintjs/core";
 import { observer } from "mobx-react-lite";
 
 import { AppPage, AppState } from "../state/app-state";
 import { UnitCard } from "../unit-card/unit-card";
+import { UnitCardV2 } from "../unit-card/unit-card-v2";
 
 interface TeamsScreenProps {
   appState: AppState;
@@ -14,15 +16,30 @@ export const TeamsScreen: React.FC<TeamsScreenProps> = observer(
   ({ appState }) => {
     return (
       <div className="teams-screen">
-        <h2 className="bp4-heading">Teams</h2>
+        <div className="topnav">
+          <Button
+            text="Back"
+            icon="arrow-left"
+            onClick={() => appState.setCurrentScreen(AppPage.HOME)}
+          />
+
+          <Button
+            text="Build team"
+            icon="build"
+            intent={Intent.PRIMARY}
+            onClick={appState.buildTeam}
+          />
+        </div>
+
+        <div className="header">Teams</div>
 
         <div className="teams-list">
           {appState.teams.map((team, teamIdx) => (
             <div className="team" key={`team-${teamIdx}`}>
-              <div>{team.name}</div>
+              <div className="team-name">{team.name}</div>
               <div className="team-unit-list">
                 {team.units.map((unit, unitIdx) => (
-                  <UnitCard
+                  <UnitCardV2
                     key={`team-${teamIdx}-unit-${unitIdx}`}
                     unit={unit}
                   />
@@ -30,17 +47,6 @@ export const TeamsScreen: React.FC<TeamsScreenProps> = observer(
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="menu-item bp4-text-large" onClick={appState.buildTeam}>
-          Build team
-        </div>
-
-        <div
-          className="menu-item bp4-text-large"
-          onClick={() => appState.setCurrentScreen(AppPage.HOME)}
-        >
-          Back
         </div>
       </div>
     );

@@ -2,6 +2,8 @@ $buttonOffset: 8px;
 
 .unit-card-v2 {
   position: relative;
+  // Give room for absolute children hanging over edges
+  margin: 14px;
 
   &.activation {
     animation: pulse 0.5s linear;

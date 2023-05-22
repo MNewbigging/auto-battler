@@ -1,6 +1,7 @@
 import "./home-screen.scss";
 
 import React from "react";
+import { motion } from "framer-motion";
 
 import { AppPage, AppState } from "../state/app-state";
 
@@ -13,24 +14,30 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ appState }) => {
     <div className="home-screen">
       <h2 className="bp4-heading">Home</h2>
 
-      <div
+      <motion.div
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 1 }}
         className="menu-item bp4-text-large"
         onClick={() => appState.setCurrentScreen(AppPage.PLAY)}
       >
         Play
-      </div>
-      <div
+      </motion.div>
+      <motion.div
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 1 }}
         className="menu-item bp4-text-large"
         onClick={() => appState.setCurrentScreen(AppPage.ROSTER)}
       >
         Roster
-      </div>
-      <div
+      </motion.div>
+      <motion.div
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 1 }}
         className="menu-item bp4-text-large"
         onClick={() => appState.setCurrentScreen(AppPage.TEAMS)}
       >
         Teams
-      </div>
+      </motion.div>
     </div>
   );
 };
