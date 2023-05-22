@@ -6,6 +6,7 @@ import { Observer, observer } from "mobx-react-lite";
 
 import { TeamBuilderState } from "../state/team-builder-state";
 import { UnitCard } from "../unit-card/unit-card";
+import { UnitCardV2 } from "../unit-card/unit-card-v2";
 
 interface UnitDragListProps {
   builderState: TeamBuilderState;
@@ -37,7 +38,7 @@ export const UnitDragList: React.FC<UnitDragListProps> = observer(
                           ref={provided.innerRef}
                           className="unit-wrapper"
                         >
-                          <UnitCard unit={unit} />
+                          <UnitCardV2 unit={unit} />
                           <div
                             className="remove-icon"
                             onClick={() =>

@@ -5,6 +5,8 @@ $buttonOffset: 8px;
   // Give room for absolute children hanging over edges
   margin: 14px;
 
+  background-color: white;
+
   &.activation {
     animation: pulse 0.5s linear;
   }
