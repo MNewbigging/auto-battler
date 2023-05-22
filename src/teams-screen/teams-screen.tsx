@@ -5,7 +5,6 @@ import { Button, Intent } from "@blueprintjs/core";
 import { observer } from "mobx-react-lite";
 
 import { AppPage, AppState } from "../state/app-state";
-import { UnitCard } from "../unit-card/unit-card";
 import { UnitCardV2 } from "../unit-card/unit-card-v2";
 
 interface TeamsScreenProps {

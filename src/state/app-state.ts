@@ -1,5 +1,5 @@
 import { DropResult } from "@hello-pangea/dnd";
-import { action, makeAutoObservable, observable } from "mobx";
+import { action, computed, makeAutoObservable, observable } from "mobx";
 
 import { BaseUnit, BuiltUnit } from "./unit";
 import { GameState } from "./game-state";
@@ -79,6 +79,10 @@ export class AppState {
   @action setRightTeam = (team: Team) => {
     this.rightTeam = team;
   };
+
+  @computed bothTeamsSet() {
+    return this.leftTeam !== undefined && this.rightTeam !== undefined;
+  }
 
   playTest() {
     if (!this.leftTeam || !this.rightTeam) {
