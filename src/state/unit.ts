@@ -8,7 +8,7 @@ import {
   runInAction,
 } from "mobx";
 
-import { GameTeam } from "./team";
+import { GameTeam, SlimGameTeam } from "./team";
 import { createId } from "../utils/utils";
 
 // Base units are used in the roster
@@ -122,4 +122,52 @@ export class GameUnit {
         break;
     }
   };
+}
+
+export class SlimGameUnit implements BaseUnit {
+  name: string;
+  health: number;
+  attack: number;
+  activationSpeed: number;
+  activationCooldown: number;
+  activationSteps: number;
+  activatedThisTurn = false;
+
+  constructor(private builtUnit: BuiltUnit) {
+    this.name = builtUnit.name;
+    this.health = builtUnit.health;
+    this.attack = builtUnit.attack;
+    this.activationSpeed = builtUnit.activationSpeed;
+    this.activationCooldown = builtUnit.activationSpeed;
+    this.activationSteps = builtUnit.activationSteps;
+  }
+
+  get shouldActivate() {
+    return this.activationCooldown <= 0 && this.activationSteps > 0;
+  }
+
+  get defeated() {
+    return this.health <= 0;
+  }
+
+  getActivationTargets(friendlyTeam: SlimGameTeam, opposingTeam: SlimGameTeam) {
+    // Just targeting enemy active unit for now
+    return [opposingTeam.getActiveUnit()];
+  }
+
+  activate(targets: SlimGameUnit[]) {
+    // Basic attack
+    targets.forEach((target) => (target.health -= this.attack));
+
+    // Used one activation step
+    this.activationSteps--;
+
+    this.activatedThisTurn = true;
+  }
+
+  postActivateReset() {
+    this.activationSteps = this.builtUnit.activationSteps;
+    this.activationCooldown = this.builtUnit.activationSpeed;
+    this.activatedThisTurn = false;
+  }
 }

@@ -3,7 +3,8 @@ import { action, makeAutoObservable, observable } from "mobx";
 
 import { BaseUnit, BuiltUnit } from "./unit";
 import { GameState } from "./game-state";
-import { GameTeam, Team } from "./team";
+import { GameTeam, SlimGameTeam, Team } from "./team";
+import { SlimGameState } from "./slim-game-state";
 import { TeamBuilderState } from "./team-builder-state";
 import { createRosterUnits, createTeams } from "../utils/unit-utils";
 
@@ -78,6 +79,20 @@ export class AppState {
   @action setRightTeam = (team: Team) => {
     this.rightTeam = team;
   };
+
+  playTest() {
+    if (!this.leftTeam || !this.rightTeam) {
+      return;
+    }
+
+    // Create slim game teams
+    const left = new SlimGameTeam(this.leftTeam);
+    const right = new SlimGameTeam(this.rightTeam);
+
+    const slimGameState = new SlimGameState(left, right);
+
+    slimGameState.startGame();
+  }
 
   play() {
     if (!this.leftTeam || !this.rightTeam) {
