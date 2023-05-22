@@ -1,6 +1,7 @@
 import "./team-builder-screen.scss";
 
 import React from "react";
+import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 
 import { TeamBuilderState } from "../state/team-builder-state";
@@ -31,11 +32,13 @@ export const TeamBuilderScreen: React.FC<TeamBuilderProps> = observer(
         <h3 className="bp4-heading">Available units</h3>
         <div className="roster-list">
           {builderState.rosterUnits.map((unit, index) => (
-            <UnitCard
-              key={`roster-unit-${index}`}
-              unit={unit}
-              onClick={() => builderState.addUnitToTeam(unit)}
-            />
+            <motion.div whileHover={{ scale: 1.1 }}>
+              <UnitCard
+                key={`roster-unit-${index}`}
+                unit={unit}
+                onClick={() => builderState.addUnitToTeam(unit)}
+              />
+            </motion.div>
           ))}
         </div>
 
