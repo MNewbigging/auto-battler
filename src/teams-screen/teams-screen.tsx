@@ -22,6 +22,8 @@ export const TeamsScreen: React.FC<TeamsScreenProps> = observer(
             onClick={() => appState.setCurrentScreen(AppPage.HOME)}
           />
 
+          <span className="title">Teams</span>
+
           <Button
             text="Build team"
             icon="build"
@@ -29,8 +31,6 @@ export const TeamsScreen: React.FC<TeamsScreenProps> = observer(
             onClick={appState.buildTeam}
           />
         </div>
-
-        <div className="header">Teams</div>
 
         <div className="teams-list">
           {appState.teams.map((team, teamIdx) => (

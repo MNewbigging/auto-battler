@@ -22,6 +22,8 @@ export const PlayScreen: React.FC<PlayScreenProps> = observer(
             onClick={() => appState.setCurrentScreen(AppPage.HOME)}
           />
 
+          <span className="title">Play</span>
+
           <Button
             text="Start game"
             icon="play"
@@ -30,8 +32,6 @@ export const PlayScreen: React.FC<PlayScreenProps> = observer(
             disabled={!appState.bothTeamsSet()}
           />
         </div>
-
-        <div className="header">Play</div>
 
         <div className="left-team">
           <TeamSelector

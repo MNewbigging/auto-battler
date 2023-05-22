@@ -21,9 +21,9 @@ export const RosterScreen: React.FC<RosterScreenProps> = observer(
             icon="arrow-left"
             onClick={() => appState.setCurrentScreen(AppPage.HOME)}
           />
-        </div>
 
-        <div className="header">Roster</div>
+          <span className="title">Roster</span>
+        </div>
 
         <div className="roster-list">
           {appState.rosterUnits.map((unit, index) => (

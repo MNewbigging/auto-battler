@@ -4,14 +4,20 @@
 
   display: grid;
   grid-template-columns: 100%;
-  grid-template-rows: 40px 50px 1fr 1fr;
+  grid-template-rows: 40px 1fr 1fr;
 
   .topnav {
     padding: 5px;
+    border-bottom: 1px solid #ced5dd8e;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .title {
+      font-weight: bolder;
+      font-size: 1.2rem;
+    }
   }
 
   .header {

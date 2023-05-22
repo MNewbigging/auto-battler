@@ -28,6 +28,8 @@ export const TeamBuilderScreen: React.FC<TeamBuilderProps> = observer(
             onClick={onCancel}
           />
 
+          <span className="title">Team Builder</span>
+
           <Button
             text="Save team"
             icon="tick"
@@ -35,8 +37,6 @@ export const TeamBuilderScreen: React.FC<TeamBuilderProps> = observer(
             onClick={onSave}
           />
         </div>
-
-        <div className="header">Team Builder</div>
 
         <div className="team-list">
           {builderState.units.length === 0 && (

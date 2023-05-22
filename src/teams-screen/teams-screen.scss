@@ -4,13 +4,21 @@
 
   display: grid;
   grid-template-columns: 100%;
-  grid-template-rows: 40px 50px auto;
+  grid-template-rows: 40px auto;
 
   .topnav {
     padding: 5px;
 
     display: flex;
+    align-items: center;
     justify-content: space-between;
+
+    border-bottom: 1px solid #ced5dd8e;
+
+    .title {
+      font-weight: bolder;
+      font-size: 1.2rem;
+    }
   }
 
   .header {

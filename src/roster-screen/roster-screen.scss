@@ -4,10 +4,24 @@
 
   display: grid;
   grid-template-columns: 100%;
-  grid-template-rows: 40px 50px auto;
+  grid-template-rows: 40px auto;
 
   .topnav {
     padding: 5px;
+
+    display: flex;
+    align-items: center;
+
+    border-bottom: 1px solid #ced5dd8e;
+
+    .title {
+      // Temp centering while there's no right button
+      margin-left: auto;
+      margin-right: auto;
+      transform: translateX(-50px);
+      font-weight: bolder;
+      font-size: 1.2rem;
+    }
   }
 
   .header {
