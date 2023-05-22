@@ -36,13 +36,9 @@
       justify-items: center;
       align-items: center;
 
-      &::before {
-        content: "X";
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
+      .icon {
         color: white;
-        font-size: larger;
+        margin-left: 11px;
       }
     }
   }

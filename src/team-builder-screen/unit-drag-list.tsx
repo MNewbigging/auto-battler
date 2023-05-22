@@ -2,7 +2,9 @@ import "./unit-drag-list.scss";
 
 import React from "react";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { Icon } from "@blueprintjs/core";
 import { Observer, observer } from "mobx-react-lite";
+import { Tooltip2 } from "@blueprintjs/popover2";
 
 import { TeamBuilderState } from "../state/team-builder-state";
 import { UnitCard } from "../unit-card/unit-card";
@@ -44,7 +46,9 @@ export const UnitDragList: React.FC<UnitDragListProps> = observer(
                             onClick={() =>
                               builderState.removeUnitFromTeam(index)
                             }
-                          ></div>
+                          >
+                            <Icon icon="cross" className="icon" />
+                          </div>
                         </div>
                       )}
                     </Draggable>

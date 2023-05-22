@@ -1,4 +1,6 @@
 $buttonOffset: 8px;
+$buttonSize: 32px;
+$buttonFontSize: 1.2rem;
 
 .unit-card-v2 {
   position: relative;
@@ -16,8 +18,8 @@ $buttonOffset: 8px;
   }
 
   .card-body {
-    width: 160px;
-    height: 240px;
+    width: 140px;
+    height: 200px;
     border: 1px solid #404854;
     border-radius: 6px;
 
@@ -51,9 +53,9 @@ $buttonOffset: 8px;
   .activation-cooldown-wrapper {
     position: absolute;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 1.5rem;
+    width: $buttonSize;
+    height: $buttonSize;
+    font-size: $buttonFontSize;
 
     .content {
       width: 100%;
