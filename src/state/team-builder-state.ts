@@ -8,8 +8,17 @@ export class TeamBuilderState {
   @observable teamName = "";
   @observable units: BuiltUnit[] = [];
 
-  constructor(public rosterUnits: BaseUnit[]) {
+  constructor(
+    private rosterUnits: BaseUnit[],
+    private defaultTeamName: string
+  ) {
     makeAutoObservable(this);
+
+    this.teamName = defaultTeamName;
+  }
+
+  @action setName(name: string) {
+    this.teamName = name;
   }
 
   @action addUnitToTeam = (unit: BaseUnit) => {
@@ -47,6 +56,11 @@ export class TeamBuilderState {
   };
 
   getTeam() {
+    // Validate the name
+    if (!this.teamName) {
+      this.teamName = this.defaultTeamName;
+    }
+
     return new Team(this.teamName, this.units);
   }
 }

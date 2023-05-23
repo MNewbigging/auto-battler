@@ -46,7 +46,10 @@ export class AppState {
   }
 
   buildTeam = () => {
-    this.teamBuilderState = new TeamBuilderState(this.rosterUnits);
+    this.teamBuilderState = new TeamBuilderState(
+      this.rosterUnits,
+      `Team ${this.teams.length + 1}`
+    );
     this.currentPage = AppPage.TEAM_BUILDER;
   };
 
@@ -61,9 +64,6 @@ export class AppState {
     }
 
     const team = this.teamBuilderState.getTeam();
-
-    // Just for now
-    team.name = `Team ${this.teams.length + 1}`;
 
     this.teams.push(team);
 

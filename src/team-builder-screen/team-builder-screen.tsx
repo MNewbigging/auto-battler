@@ -1,7 +1,7 @@
 import "./team-builder-screen.scss";
 
 import React from "react";
-import { Button, Intent } from "@blueprintjs/core";
+import { Button, InputGroup, Intent } from "@blueprintjs/core";
 import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 
@@ -38,14 +38,24 @@ export const TeamBuilderScreen: React.FC<TeamBuilderProps> = observer(
           />
         </div>
 
-        <div className="team-list">
-          {builderState.units.length === 0 && (
-            <span>
-              Click a unit below to add it to the team, then drag to reorder
-            </span>
-          )}
+        <div className="team-area">
+          <div className="team-name">
+            Team name:{" "}
+            <InputGroup
+              value={builderState.teamName}
+              onChange={(event) => builderState.setName(event.target.value)}
+            />
+          </div>
 
-          <UnitDragList builderState={builderState} />
+          <div className="team-list">
+            {builderState.units.length === 0 && (
+              <span>
+                Click a unit below to add it to the team, then drag to reorder
+              </span>
+            )}
+
+            <UnitDragList builderState={builderState} />
+          </div>
         </div>
 
         <div className="roster-area">
