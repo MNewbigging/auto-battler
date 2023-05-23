@@ -45,16 +45,14 @@ export const App: React.FC<AppProps> = observer(({ appState }) => {
 
       break;
     case AppPage.GAME:
-      // if (appState.gameState) {
-      //   page = (
-      //     <GameScreen
-      //       gameState={appState.gameState}
-      //       onExit={() => appState.exitGame()}
-      //     />
-      //   );
-      // }
-
-      page = <GameScreenV2 />;
+      if (appState.gameRendererState) {
+        page = (
+          <GameScreenV2
+            gameState={appState.gameRendererState}
+            onExit={appState.exitGame}
+          />
+        );
+      }
       break;
     default:
       page = <HomeScreen appState={appState} />;

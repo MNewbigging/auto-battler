@@ -2,6 +2,7 @@ import { action, computed, makeAutoObservable, observable } from "mobx";
 
 import { BaseUnit } from "./unit";
 import { GameEventLog, SlimGameState } from "./slim-game-state";
+import { GameRendererState } from "./game-renderer-state";
 import { GameState } from "./game-state";
 import { GameTeam, SlimGameTeam, Team } from "./team";
 import { TeamBuilderState } from "./team-builder-state";
@@ -32,6 +33,7 @@ export class AppState {
   @observable leftTeam?: Team;
   @observable rightTeam?: Team;
   gameState?: GameState;
+  gameRendererState?: GameRendererState;
 
   constructor() {
     makeAutoObservable(this);
@@ -152,12 +154,15 @@ export class AppState {
     this.setCurrentScreen(AppPage.GAME);
   }
 
-  exitGame() {
+  exitGame = () => {
     this.gameState = undefined;
+    this.gameRendererState = undefined;
     this.setCurrentScreen(AppPage.PLAY);
-  }
+  };
 
   @action onGameOver = (eventLog: GameEventLog) => {
+    this.gameRendererState = new GameRendererState(eventLog);
+
     // Can now render the game
     this.currentPage = AppPage.GAME;
   };
