@@ -2,10 +2,11 @@ import "./game-screen-v2.scss";
 
 import React from "react";
 import { Button } from "@blueprintjs/core";
+import { Observer, observer } from "mobx-react-lite";
 import { motion } from "framer-motion";
-import { observer } from "mobx-react-lite";
 
 import { GameRendererState } from "../state/game-renderer-state";
+import { Pulser } from "../pulser/pulser";
 import { UnitCardV2 } from "../unit-card/unit-card-v2";
 
 interface GameScreenV2Props {
@@ -23,14 +24,15 @@ export const GameScreenV2: React.FC<GameScreenV2Props> = observer(
 
         <div className="turn-timer">
           Turn
-          <motion.span
-            animate={{ scale: [1, 1.5, 1] }}
-            transition={{ duration: 0.5, times: [0, 0.3, 1] }}
-            className="turn-timer"
-            key={`turn-${gameState.turn}`}
-          >
-            {gameState.turn}
-          </motion.span>
+          <Observer>
+            {() => (
+              <Pulser
+                value={gameState.turn}
+                keyName={`turn-${gameState.turn}`}
+                className="turn-timer"
+              />
+            )}
+          </Observer>
         </div>
 
         <div className="left-side">

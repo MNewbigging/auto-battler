@@ -18,6 +18,14 @@ export class GameRendererState {
 
     this.leftTeam = leftTeam;
     this.rightTeam = rightTeam;
+
+    this.incrementTurn();
+  }
+
+  @action incrementTurn() {
+    this.turn++;
+
+    setTimeout(() => this.incrementTurn(), 2000);
   }
 
   private step() {
