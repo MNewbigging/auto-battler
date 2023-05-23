@@ -1,8 +1,8 @@
 import "./unit-drag-list.scss";
 
 import React from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
-import { Icon } from "@blueprintjs/core";
 import { Observer, observer } from "mobx-react-lite";
 
 import { TeamBuilderState } from "../state/team-builder-state";
@@ -38,12 +38,17 @@ export const UnitDragList: React.FC<UnitDragListProps> = observer(
                           ref={provided.innerRef}
                           className="unit-wrapper"
                         >
-                          <UnitCardV2
-                            unit={unit}
-                            onClick={() =>
-                              builderState.removeUnitFromTeam(index)
-                            }
-                          />
+                          <motion.div
+                            initial={{ scale: 0.5 }}
+                            animate={{ scale: 1 }}
+                          >
+                            <UnitCardV2
+                              unit={unit}
+                              onClick={() =>
+                                builderState.removeUnitFromTeam(index)
+                              }
+                            />
+                          </motion.div>
                         </div>
                       )}
                     </Draggable>
