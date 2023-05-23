@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 
 import { GameRendererState } from "../state/game-renderer-state";
+import { UnitCardV2 } from "../unit-card/unit-card-v2";
 
 interface GameScreenV2Props {
   gameState: GameRendererState;
@@ -32,9 +33,40 @@ export const GameScreenV2: React.FC<GameScreenV2Props> = observer(
           </motion.span>
         </div>
 
-        <div className="left-side"></div>
+        <div className="left-side">
+          <div className="team-name">{gameState.leftTeam.name}</div>
+          <div className="team-list">
+            {gameState.leftTeam.units.map((unit, index) => (
+              <motion.div
+                key={`left-unit-${index}`}
+                initial={{ x: -500 }}
+                animate={{ x: 0 }}
+                transition={{ delay: index * 0.3 }}
+                layout
+              >
+                <UnitCardV2 unit={unit} />
+              </motion.div>
+            ))}
+          </div>
+        </div>
 
-        <div className="right-side"></div>
+        <div className="right-side">
+          <div className="team-name">{gameState.rightTeam.name}</div>
+
+          <div className="team-list">
+            {gameState.rightTeam.units.map((unit, index) => (
+              <motion.div
+                key={`right-unit-${index}`}
+                initial={{ x: 500 }}
+                animate={{ x: 0 }}
+                transition={{ delay: index * 0.3 }}
+                layout
+              >
+                <UnitCardV2 unit={unit} />
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }

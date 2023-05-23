@@ -4,7 +4,7 @@
 
   display: grid;
   grid-template-columns: 50% 50%;
-  grid-template-rows: 40px 50px auto;
+  grid-template-rows: 40px 150px auto;
   grid-template-areas:
     "topnav topnav"
     "timer timer"
@@ -27,11 +27,35 @@
     gap: 10px;
   }
 
+  .left-side,
+  .right-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: 20px;
+
+    .team-name {
+      font-size: 1.4rem;
+    }
+
+    .team-list {
+      display: flex;
+    }
+  }
+
   .left-side {
     grid-area: left;
+    align-items: end;
+    padding-right: 20px;
+
+    .team-list {
+      flex-direction: row-reverse;
+    }
   }
 
   .right-side {
     grid-area: right;
+    align-items: start;
+    padding-left: 20px;
   }
 }

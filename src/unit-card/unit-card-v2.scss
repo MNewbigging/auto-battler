@@ -9,14 +9,6 @@ $buttonFontSize: 1.2rem;
   background-color: white;
   user-select: none;
 
-  &.activation {
-    animation: pulse 0.5s linear;
-  }
-
-  &.defeated {
-    animation: fadeOut 1.5s linear forwards;
-  }
-
   .card-body {
     width: 140px;
     height: 200px;
@@ -73,11 +65,6 @@ $buttonFontSize: 1.2rem;
     left: -$buttonOffset;
 
     background-color: rgb(246, 145, 145);
-
-    &.on-hit {
-      animation: onHit 0.5s linear;
-      animation-delay: 0.3s;
-    }
   }
 
   .attack-wrapper {
@@ -99,42 +86,5 @@ $buttonFontSize: 1.2rem;
     transform: translateX(-50%);
 
     background-color: rgb(186, 186, 253);
-
-    &.activation-cooldown {
-      animation: pulse 0.5s linear;
-    }
-  }
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes fadeOut {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes onHit {
-  0% {
-    background-color: white;
-  }
-  50% {
-    background-color: rgb(251, 46, 46);
-  }
-  100% {
-    background-color: white;
   }
 }

@@ -51,12 +51,10 @@ export class GameTeam {
     this.name = team.name;
 
     // Create the game units for this team
-    this.units = team.units.map((builtUnit) => new GameUnit(builtUnit));
-
-    // If this is a right-sided team, it should reverse its units
-    if (this.rightSide) {
-      this.units = this.units.reverse();
-    }
+    // Both teams are reversed
+    this.units = team.units
+      .map((builtUnit) => new GameUnit(builtUnit))
+      .reverse();
   }
 
   get defeated() {
@@ -64,7 +62,7 @@ export class GameTeam {
   }
 
   getActiveUnit() {
-    return this.rightSide ? this.units[0] : this.units[this.units.length - 1];
+    return this.units[0];
   }
 
   hasDefeatedUnits() {
