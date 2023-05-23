@@ -38,12 +38,18 @@
     align-items: center;
     justify-content: center;
 
-    .team-name {
+    .top-row {
       flex: 0 0 30px;
 
       display: flex;
       align-items: center;
       gap: 10px;
+
+      .team-name {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
     }
 
     .team-list {

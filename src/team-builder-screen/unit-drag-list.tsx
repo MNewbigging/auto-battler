@@ -4,10 +4,8 @@ import React from "react";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { Icon } from "@blueprintjs/core";
 import { Observer, observer } from "mobx-react-lite";
-import { Tooltip2 } from "@blueprintjs/popover2";
 
 import { TeamBuilderState } from "../state/team-builder-state";
-import { UnitCard } from "../unit-card/unit-card";
 import { UnitCardV2 } from "../unit-card/unit-card-v2";
 
 interface UnitDragListProps {

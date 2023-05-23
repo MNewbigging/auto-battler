@@ -39,12 +39,14 @@ export const TeamBuilderScreen: React.FC<TeamBuilderProps> = observer(
         </div>
 
         <div className="team-area">
-          <div className="team-name">
-            Team name:{" "}
-            <InputGroup
-              value={builderState.teamName}
-              onChange={(event) => builderState.setName(event.target.value)}
-            />
+          <div className="top-row">
+            <div className="team-name">
+              Team name:{" "}
+              <InputGroup
+                value={builderState.teamName}
+                onChange={(event) => builderState.setName(event.target.value)}
+              />
+            </div>
           </div>
 
           <div className="team-list">
@@ -62,7 +64,7 @@ export const TeamBuilderScreen: React.FC<TeamBuilderProps> = observer(
           <h3 className="bp4-heading">Available units</h3>
           <div className="roster-list">
             {builderState.rosterUnits.map((unit, index) => (
-              <motion.div whileHover={{ scale: 1.1 }}>
+              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 1 }}>
                 <UnitCardV2
                   key={`roster-unit-${index}`}
                   unit={unit}
