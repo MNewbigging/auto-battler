@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 
 import { TeamBuilderState } from "../state/team-builder-state";
-import { UnitCard } from "../unit-card/unit-card";
 import { UnitCardV2 } from "../unit-card/unit-card-v2";
 import { UnitDragList } from "./unit-drag-list";
 
@@ -51,8 +50,9 @@ export const TeamBuilderScreen: React.FC<TeamBuilderProps> = observer(
 
           <div className="team-list">
             {builderState.units.length === 0 && (
-              <span>
-                Click a unit below to add it to the team, then drag to reorder
+              <span style={{ marginLeft: "auto", marginRight: "auto" }}>
+                Click a unit below to add it to the team, then drag to reorder.
+                Click a unit in the team to remove it.
               </span>
             )}
 
@@ -64,9 +64,12 @@ export const TeamBuilderScreen: React.FC<TeamBuilderProps> = observer(
           <h3 className="bp4-heading">Available units</h3>
           <div className="roster-list">
             {builderState.rosterUnits.map((unit, index) => (
-              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 1 }}>
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 1 }}
+                key={`roster-unit-${index}`}
+              >
                 <UnitCardV2
-                  key={`roster-unit-${index}`}
                   unit={unit}
                   onClick={() => builderState.addUnitToTeam(unit)}
                 />

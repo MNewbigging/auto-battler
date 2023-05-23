@@ -7,6 +7,7 @@ $buttonFontSize: 1.2rem;
   // Give room for absolute children hanging over edges
   margin: 14px;
   background-color: white;
+  user-select: none;
 
   &.activation {
     animation: pulse 0.5s linear;

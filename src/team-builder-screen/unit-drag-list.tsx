@@ -38,15 +38,12 @@ export const UnitDragList: React.FC<UnitDragListProps> = observer(
                           ref={provided.innerRef}
                           className="unit-wrapper"
                         >
-                          <UnitCardV2 unit={unit} />
-                          <div
-                            className="remove-icon"
+                          <UnitCardV2
+                            unit={unit}
                             onClick={() =>
                               builderState.removeUnitFromTeam(index)
                             }
-                          >
-                            <Icon icon="cross" className="icon" />
-                          </div>
+                          />
                         </div>
                       )}
                     </Draggable>
