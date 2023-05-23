@@ -1,7 +1,6 @@
-import { DropResult } from "@hello-pangea/dnd";
 import { action, computed, makeAutoObservable, observable } from "mobx";
 
-import { BaseUnit, BuiltUnit } from "./unit";
+import { BaseUnit } from "./unit";
 import { GameState } from "./game-state";
 import { GameTeam, SlimGameTeam, Team } from "./team";
 import { SlimGameState } from "./slim-game-state";
@@ -45,7 +44,11 @@ export class AppState {
     this.currentPage = screen;
   }
 
-  buildTeam = () => {
+  getTeam(id: string) {
+    return this.teams.find((team) => team.id === id);
+  }
+
+  @action buildTeam = () => {
     this.teamBuilderState = new TeamBuilderState(
       this.rosterUnits,
       `Team ${this.teams.length + 1}`
@@ -53,7 +56,26 @@ export class AppState {
     this.currentPage = AppPage.TEAM_BUILDER;
   };
 
-  cancelBuildTeam = () => {
+  @action editTeam(id: string) {
+    const team = this.getTeam(id);
+    if (!team) {
+      return;
+    }
+
+    const tbs = new TeamBuilderState(
+      this.rosterUnits,
+      `Team ${this.teams.length + 1}`
+    );
+
+    tbs.units = [...team.units];
+    tbs.teamName = team.name;
+    tbs.editingTeamId = id;
+
+    this.teamBuilderState = tbs;
+    this.currentPage = AppPage.TEAM_BUILDER;
+  }
+
+  @action cancelBuildTeam = () => {
     this.teamBuilderState = undefined;
     this.currentPage = AppPage.TEAMS;
   };
@@ -65,12 +87,30 @@ export class AppState {
 
     const team = this.teamBuilderState.getTeam();
 
-    this.teams.push(team);
+    // Was this an edit or a new team?
+    if (this.teamBuilderState.editingTeamId) {
+      // Find the team it replaces
+      const editTeamId = this.teamBuilderState.editingTeamId;
+      const editTeamIndex = this.teams.findIndex(
+        (team) => team.id === editTeamId
+      );
+      if (editTeamIndex >= 0) {
+        // Replace it with the new team
+        this.teams.splice(editTeamIndex, 1, team);
+      }
+    } else {
+      // Is a new team
+      this.teams.push(team);
+    }
 
     this.teamBuilderState = undefined;
 
     this.setCurrentScreen(AppPage.TEAMS);
   };
+
+  @action deleteTeam(id: string) {
+    this.teams = this.teams.filter((team) => team.id !== id);
+  }
 
   @action setLeftTeam = (team: Team) => {
     this.leftTeam = team;

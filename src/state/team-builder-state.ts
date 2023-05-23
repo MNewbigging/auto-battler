@@ -8,6 +8,8 @@ export class TeamBuilderState {
   @observable teamName = "";
   @observable units: BuiltUnit[] = [];
 
+  editingTeamId = "";
+
   constructor(public rosterUnits: BaseUnit[], private defaultTeamName: string) {
     makeAutoObservable(this);
 
