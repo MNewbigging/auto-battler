@@ -48,7 +48,17 @@
 
     .team-list {
       flex: 1 1 100%;
+      width: 100%;
 
+      // Hide scrollbars but allow scrolling
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+
+      overflow-x: auto;
+      overflow-y: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
