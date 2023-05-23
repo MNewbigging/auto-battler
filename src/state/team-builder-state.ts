@@ -2,7 +2,7 @@ import { DropResult } from "@hello-pangea/dnd";
 import { action, makeAutoObservable, observable } from "mobx";
 
 import { BaseUnit, BuiltUnit } from "./unit";
-import { Team } from "./team";
+import { BuiltTeam } from "./team";
 
 export class TeamBuilderState {
   @observable teamName = "";
@@ -60,6 +60,6 @@ export class TeamBuilderState {
       this.teamName = this.defaultTeamName;
     }
 
-    return new Team(this.teamName, this.units);
+    return new BuiltTeam(this.teamName, this.units);
   }
 }

@@ -1,12 +1,14 @@
-import { SlimGameTeam } from "./team";
+import { BuiltTeam, SlimGameTeam } from "./team";
 import { SlimGameUnit } from "./unit";
 
 export interface GameEventLog {
+  leftTeam: BuiltTeam;
+  rightTeam: BuiltTeam;
   events: string[];
 }
 
 // Plays a match between two teams, without any frontend
-export class SlimGameState {
+export class GameResolver {
   turn = 0;
   events: string[] = [];
 
@@ -171,6 +173,10 @@ export class SlimGameState {
     // Print out the game events
     this.events.forEach((event) => console.log(event));
 
-    this.onGameOver({ events: this.events });
+    this.onGameOver({
+      leftTeam: this.leftTeam.builtTeam,
+      rightTeam: this.rightTeam.builtTeam,
+      events: this.events,
+    });
   }
 }

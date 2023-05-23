@@ -18,6 +18,13 @@
 
   .turn-timer {
     grid-area: timer;
+
+    font-size: 2rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
   }
 
   .left-side {

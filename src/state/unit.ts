@@ -1,17 +1,9 @@
-import { AnimationEvent } from "react";
-import {
-  action,
-  computed,
-  makeAutoObservable,
-  observable,
-  reaction,
-  runInAction,
-} from "mobx";
+import { action, makeAutoObservable, observable } from "mobx";
 
 import { GameTeam, SlimGameTeam } from "./team";
 import { createId } from "../utils/utils";
 
-// Base units are used in the roster
+// Base units are used in the roster, these are their base property values
 export interface BaseUnit {
   name: string;
   health: number;
@@ -20,15 +12,12 @@ export interface BaseUnit {
   activationSteps: number;
 }
 
-// A Built Unit exists in a team
+// A Built Unit exists in a team, and may have been modified
 export class BuiltUnit implements BaseUnit {
   name: string;
   @observable health: number;
-  @observable healthAnimating = false;
   @observable attack: number;
-  @observable attackAnimating = false;
   @observable activationSpeed: number;
-  @observable activationSpeedAnimating = false;
   @observable activationSteps: number;
 
   constructor(public baseUnit: BaseUnit) {
@@ -51,14 +40,62 @@ export enum UnitAnimation {
   DEFEATED = "defeated",
 }
 
-// A Game Unit exists during a game
+// Used in the slim game resolver to determine game outcomes
+export class SlimGameUnit implements BaseUnit {
+  name: string;
+  health: number;
+  attack: number;
+  activationSpeed: number;
+  activationCooldown: number;
+  activationSteps: number;
+  activatedThisTurn = false;
+
+  constructor(private builtUnit: BuiltUnit) {
+    this.name = builtUnit.name;
+    this.health = builtUnit.health;
+    this.attack = builtUnit.attack;
+    this.activationSpeed = builtUnit.activationSpeed;
+    this.activationCooldown = builtUnit.activationSpeed;
+    this.activationSteps = builtUnit.activationSteps;
+  }
+
+  get shouldActivate() {
+    return this.activationCooldown <= 0 && this.activationSteps > 0;
+  }
+
+  get defeated() {
+    return this.health <= 0;
+  }
+
+  getActivationTargets(friendlyTeam: SlimGameTeam, opposingTeam: SlimGameTeam) {
+    // Just targeting enemy active unit for now
+    return [opposingTeam.getActiveUnit()];
+  }
+
+  activate(targets: SlimGameUnit[]) {
+    // Basic attack
+    targets.forEach((target) => (target.health -= this.attack));
+
+    // Used one activation step
+    this.activationSteps--;
+
+    this.activatedThisTurn = true;
+  }
+
+  postActivateReset() {
+    this.activationSteps = this.builtUnit.activationSteps;
+    this.activationCooldown = this.builtUnit.activationSpeed;
+    this.activatedThisTurn = false;
+  }
+}
+
+// Used by the game renderer, for animating a game playback
 export class GameUnit {
   readonly id = createId();
   name: string;
   @observable health: number;
   @observable attack: number;
   @observable activationSpeed: number;
-  @observable activationSpeedAnimating = false;
   @observable activationCooldown: number;
   @observable activationCooldownAnimating = false;
   @observable activationAnimating = false;
@@ -122,52 +159,4 @@ export class GameUnit {
         break;
     }
   };
-}
-
-export class SlimGameUnit implements BaseUnit {
-  name: string;
-  health: number;
-  attack: number;
-  activationSpeed: number;
-  activationCooldown: number;
-  activationSteps: number;
-  activatedThisTurn = false;
-
-  constructor(private builtUnit: BuiltUnit) {
-    this.name = builtUnit.name;
-    this.health = builtUnit.health;
-    this.attack = builtUnit.attack;
-    this.activationSpeed = builtUnit.activationSpeed;
-    this.activationCooldown = builtUnit.activationSpeed;
-    this.activationSteps = builtUnit.activationSteps;
-  }
-
-  get shouldActivate() {
-    return this.activationCooldown <= 0 && this.activationSteps > 0;
-  }
-
-  get defeated() {
-    return this.health <= 0;
-  }
-
-  getActivationTargets(friendlyTeam: SlimGameTeam, opposingTeam: SlimGameTeam) {
-    // Just targeting enemy active unit for now
-    return [opposingTeam.getActiveUnit()];
-  }
-
-  activate(targets: SlimGameUnit[]) {
-    // Basic attack
-    targets.forEach((target) => (target.health -= this.attack));
-
-    // Used one activation step
-    this.activationSteps--;
-
-    this.activatedThisTurn = true;
-  }
-
-  postActivateReset() {
-    this.activationSteps = this.builtUnit.activationSteps;
-    this.activationCooldown = this.builtUnit.activationSpeed;
-    this.activatedThisTurn = false;
-  }
 }

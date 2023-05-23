@@ -1,10 +1,9 @@
 import { action, computed, makeAutoObservable, observable } from "mobx";
 
 import { BaseUnit } from "./unit";
-import { GameEventLog, SlimGameState } from "./slim-game-state";
+import { BuiltTeam, GameTeam, SlimGameTeam } from "./team";
+import { GameEventLog, GameResolver } from "./game-resolver";
 import { GameRendererState } from "./game-renderer-state";
-import { GameState } from "./game-state";
-import { GameTeam, SlimGameTeam, Team } from "./team";
 import { TeamBuilderState } from "./team-builder-state";
 import { createRosterUnits, createTeams } from "../utils/unit-utils";
 
@@ -24,15 +23,14 @@ export class AppState {
   rosterUnits: BaseUnit[] = [];
 
   // Teams
-  @observable teams: Team[] = [];
+  @observable teams: BuiltTeam[] = [];
 
   // Team builder
   teamBuilderState?: TeamBuilderState;
 
   // Play
-  @observable leftTeam?: Team;
-  @observable rightTeam?: Team;
-  gameState?: GameState;
+  @observable leftTeam?: BuiltTeam;
+  @observable rightTeam?: BuiltTeam;
   gameRendererState?: GameRendererState;
 
   constructor() {
@@ -114,11 +112,11 @@ export class AppState {
     this.teams = this.teams.filter((team) => team.id !== id);
   }
 
-  @action setLeftTeam = (team: Team) => {
+  @action setLeftTeam = (team: BuiltTeam) => {
     this.leftTeam = team;
   };
 
-  @action setRightTeam = (team: Team) => {
+  @action setRightTeam = (team: BuiltTeam) => {
     this.rightTeam = team;
   };
 
@@ -136,32 +134,21 @@ export class AppState {
     const right = new SlimGameTeam(this.rightTeam);
 
     // Create game runner and run the game
-    const slimGameState = new SlimGameState(left, right, this.onGameOver);
+    const slimGameState = new GameResolver(left, right, this.onGameOver);
     slimGameState.startGame();
   }
 
-  play() {
-    if (!this.leftTeam || !this.rightTeam) {
-      return;
-    }
-
-    // Create game teams
-    const left = new GameTeam(this.leftTeam);
-    const right = new GameTeam(this.rightTeam, true);
-
-    this.gameState = new GameState(left, right);
-
-    this.setCurrentScreen(AppPage.GAME);
-  }
-
   exitGame = () => {
-    this.gameState = undefined;
     this.gameRendererState = undefined;
     this.setCurrentScreen(AppPage.PLAY);
   };
 
   @action onGameOver = (eventLog: GameEventLog) => {
-    this.gameRendererState = new GameRendererState(eventLog);
+    // Create game teams
+    const left = new GameTeam(eventLog.leftTeam);
+    const right = new GameTeam(eventLog.rightTeam);
+
+    this.gameRendererState = new GameRendererState(eventLog, left, right);
 
     // Can now render the game
     this.currentPage = AppPage.GAME;

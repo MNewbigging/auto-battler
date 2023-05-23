@@ -3,23 +3,49 @@ import { action, makeAutoObservable, makeObservable, observable } from "mobx";
 import { BuiltUnit, GameUnit, SlimGameUnit } from "./unit";
 import { createId } from "../utils/utils";
 
-export class Team {
+// A team made by a player
+export class BuiltTeam {
   readonly id = createId();
 
-  @observable units: BuiltUnit[];
+  constructor(public name: string, public units: BuiltUnit[]) {}
+}
 
-  constructor(public name: string, units: BuiltUnit[]) {
-    makeAutoObservable(this);
+// A team used by the game resolver
+export class SlimGameTeam {
+  name: string;
+  units: SlimGameUnit[];
 
-    this.units = units;
+  constructor(public builtTeam: BuiltTeam, public rightSide = false) {
+    this.name = builtTeam.name;
+
+    // Setup game units for this team
+    const units = builtTeam.units.map(
+      (builtUnit) => new SlimGameUnit(builtUnit)
+    );
+
+    // Flip units on right side, as all teams are built for the left
+    this.units = rightSide ? units.reverse() : units;
+  }
+
+  getActiveUnit() {
+    return this.rightSide ? this.units[0] : this.units[this.units.length - 1];
+  }
+
+  getDefeatedUnits() {
+    return this.units.filter((unit) => unit.defeated);
+  }
+
+  destroyDefeatedUnits() {
+    this.units = this.units.filter((unit) => !unit.defeated);
   }
 }
 
+// A team used by the game renderer, requiring observable properties
 export class GameTeam {
   readonly name: string;
   @observable units: GameUnit[];
 
-  constructor(public team: Team, public rightSide = false) {
+  constructor(public team: BuiltTeam, public rightSide = false) {
     makeAutoObservable(this);
 
     this.name = team.name;
@@ -52,32 +78,5 @@ export class GameTeam {
     }
 
     this.units.splice(unitIndex, 1);
-  }
-}
-
-export class SlimGameTeam {
-  name: string;
-  units: SlimGameUnit[];
-
-  constructor(team: Team, public rightSide = false) {
-    this.name = team.name;
-
-    // Setup game units for this team
-    const units = team.units.map((builtUnit) => new SlimGameUnit(builtUnit));
-
-    // Flip units on right side, as all teams are built for the left
-    this.units = rightSide ? units.reverse() : units;
-  }
-
-  getActiveUnit() {
-    return this.rightSide ? this.units[0] : this.units[this.units.length - 1];
-  }
-
-  getDefeatedUnits() {
-    return this.units.filter((unit) => unit.defeated);
-  }
-
-  destroyDefeatedUnits() {
-    this.units = this.units.filter((unit) => !unit.defeated);
   }
 }
