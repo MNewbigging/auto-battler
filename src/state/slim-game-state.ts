@@ -1,6 +1,10 @@
 import { SlimGameTeam } from "./team";
 import { SlimGameUnit } from "./unit";
 
+export interface GameEventLog {
+  events: string[];
+}
+
 // Plays a match between two teams, without any frontend
 export class SlimGameState {
   turn = 0;
@@ -8,7 +12,8 @@ export class SlimGameState {
 
   constructor(
     private leftTeam: SlimGameTeam,
-    private rightTeam: SlimGameTeam
+    private rightTeam: SlimGameTeam,
+    private onGameOver: (eventLog: GameEventLog) => void
   ) {}
 
   startGame() {
@@ -55,7 +60,7 @@ export class SlimGameState {
       const winningTeam = this.getWinningTeam();
       if (winningTeam) {
         // The game is over!
-        this.onGameOver(winningTeam);
+        this.gameOver(winningTeam);
 
         return;
       }
@@ -160,10 +165,12 @@ export class SlimGameState {
     return undefined;
   }
 
-  private onGameOver(winningTeam: SlimGameTeam) {
+  private gameOver(winningTeam: SlimGameTeam) {
     this.events.push(`Game over! ${winningTeam.name} has won!`);
 
     // Print out the game events
     this.events.forEach((event) => console.log(event));
+
+    this.onGameOver({ events: this.events });
   }
 }

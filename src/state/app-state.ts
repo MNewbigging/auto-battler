@@ -1,9 +1,9 @@
 import { action, computed, makeAutoObservable, observable } from "mobx";
 
 import { BaseUnit } from "./unit";
+import { GameEventLog, SlimGameState } from "./slim-game-state";
 import { GameState } from "./game-state";
 import { GameTeam, SlimGameTeam, Team } from "./team";
-import { SlimGameState } from "./slim-game-state";
 import { TeamBuilderState } from "./team-builder-state";
 import { createRosterUnits, createTeams } from "../utils/unit-utils";
 
@@ -124,7 +124,7 @@ export class AppState {
     return this.leftTeam !== undefined && this.rightTeam !== undefined;
   }
 
-  playTest() {
+  @action playTest() {
     if (!this.leftTeam || !this.rightTeam) {
       return;
     }
@@ -133,8 +133,8 @@ export class AppState {
     const left = new SlimGameTeam(this.leftTeam);
     const right = new SlimGameTeam(this.rightTeam);
 
-    const slimGameState = new SlimGameState(left, right);
-
+    // Create game runner and run the game
+    const slimGameState = new SlimGameState(left, right, this.onGameOver);
     slimGameState.startGame();
   }
 
@@ -156,4 +156,9 @@ export class AppState {
     this.gameState = undefined;
     this.setCurrentScreen(AppPage.PLAY);
   }
+
+  @action onGameOver = (eventLog: GameEventLog) => {
+    // Can now render the game
+    this.currentPage = AppPage.GAME;
+  };
 }
