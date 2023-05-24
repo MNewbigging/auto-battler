@@ -1,6 +1,6 @@
 import { action, makeAutoObservable, observable } from "mobx";
 
-import { GameTeam, SlimGameTeam } from "./team";
+import { GameTeam, SlimGameTeam, TeamSide } from "./team";
 import { createId } from "../utils/utils";
 
 // Base units are used in the roster, these are their base property values
@@ -42,6 +42,7 @@ export enum UnitAnimation {
 
 // Used in the slim game resolver to determine game outcomes
 export class SlimGameUnit implements BaseUnit {
+  side: TeamSide;
   name: string;
   health: number;
   attack: number;
@@ -50,7 +51,9 @@ export class SlimGameUnit implements BaseUnit {
   activationSteps: number;
   activatedThisTurn = false;
 
-  constructor(private builtUnit: BuiltUnit) {
+  constructor(private builtUnit: BuiltUnit, side: TeamSide) {
+    this.side = side;
+
     this.name = builtUnit.name;
     this.health = builtUnit.health;
     this.attack = builtUnit.attack;

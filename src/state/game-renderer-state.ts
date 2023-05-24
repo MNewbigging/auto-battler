@@ -1,6 +1,6 @@
 import { action, makeAutoObservable, observable } from "mobx";
 
-import { GameEventLog } from "./game-resolver";
+import { GameEvent, GameEventLog } from "./game-resolver";
 import { GameTeam } from "./team";
 
 export class GameRendererState {
@@ -16,20 +16,27 @@ export class GameRendererState {
   ) {
     makeAutoObservable(this);
 
+    console.log("renderer got events: ", eventLog.events);
+
     this.leftTeam = leftTeam;
     this.rightTeam = rightTeam;
 
-    this.incrementTurn();
+    // Start
+    setTimeout(() => this.step(), 1000);
   }
 
   @action incrementTurn() {
     this.turn++;
-
-    setTimeout(() => this.incrementTurn(), 2000);
   }
 
-  private step() {
+  @action step() {
     // Step through the event log
+    const first = this.eventLog.events[0][0];
+
+    // What is it?
+    if (first.type === "game") {
+      this[first.property] = first.value;
+    }
   }
 }
 

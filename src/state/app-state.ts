@@ -130,8 +130,8 @@ export class AppState {
     }
 
     // Create slim game teams
-    const left = new SlimGameTeam(this.leftTeam);
-    const right = new SlimGameTeam(this.rightTeam, true);
+    const left = new SlimGameTeam(this.leftTeam, "left");
+    const right = new SlimGameTeam(this.rightTeam, "right");
 
     // Create game runner and run the game
     const slimGameState = new GameResolver(left, right, this.onGameOver);

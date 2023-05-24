@@ -1,16 +1,36 @@
 import { BuiltTeam, SlimGameTeam } from "./team";
 import { SlimGameUnit } from "./unit";
 
+// How to break down events into actions?
+export interface GameEvent {
+  type: "game";
+  property: "turn";
+  value: number;
+}
+
+export interface UnitEvent {
+  type: "unit";
+  side: "left" | "right";
+  unitId: string; // find the unit
+  // Event and value kinda need to be an array, in case multiple change at once
+  event: string; // js array-style property lookup (will this trigger observable change?)
+  value: number; // change the property to this value
+}
+
+export type LogEventType = GameEvent | UnitEvent;
+
 export interface GameEventLog {
   leftTeam: BuiltTeam;
   rightTeam: BuiltTeam;
-  events: string[];
+  log: string[];
+  events: LogEventType[][]; // a 'step' has an array of events, once those are done, go to next step
 }
 
 // Plays a match between two teams, without any frontend
 export class GameResolver {
   turn = 0;
-  events: string[] = [];
+  log: string[] = [];
+  events: LogEventType[][] = [];
 
   constructor(
     private leftTeam: SlimGameTeam,
@@ -47,7 +67,7 @@ export class GameResolver {
       activationCount = rightActiveUnit.activationSteps;
     }
 
-    this.events.push(`Turn ${this.turn} activation count: ${activationCount}`);
+    this.log.push(`Turn ${this.turn} activation count: ${activationCount}`);
 
     // Perform activation phase
     for (let i = 0; i < activationCount; i++) {
@@ -82,13 +102,23 @@ export class GameResolver {
 
   private incrementTurnCounter() {
     this.turn++;
-    this.events.push("Next turn: " + this.turn);
+    this.log.push("Next turn: " + this.turn);
+
+    // Create game event for this step
+    const gameEvent: GameEvent = {
+      type: "game",
+      property: "turn",
+      value: this.turn,
+    };
+
+    // Add an event step
+    this.events.push([gameEvent]);
   }
 
   private reduceUnitCooldowns(units: SlimGameUnit[]) {
     units.forEach((unit) => {
       unit.activationCooldown--;
-      this.events.push(
+      this.log.push(
         `${unit.name} cooldown reduced to ${unit.activationCooldown}`
       );
     });
@@ -111,9 +141,7 @@ export class GameResolver {
         targetString += target.name + ", health: " + target.health + ". ";
       });
 
-      this.events.push(
-        `${leftActiveUnit.name} activated against ${targetString}`
-      );
+      this.log.push(`${leftActiveUnit.name} activated against ${targetString}`);
     }
 
     if (rightActiveUnit.shouldActivate) {
@@ -128,7 +156,7 @@ export class GameResolver {
         targetString += target.name + ", health: " + target.health + ". ";
       });
 
-      this.events.push(
+      this.log.push(
         `${rightActiveUnit.name} activated against ${targetString}`
       );
     }
@@ -140,7 +168,7 @@ export class GameResolver {
       let defeatedString = "";
       left.forEach((unit) => (defeatedString += unit.name + ", "));
 
-      this.events.push(`Left team has defeated units: ${defeatedString}`);
+      this.log.push(`Left team has defeated units: ${defeatedString}`);
     }
 
     const right = this.rightTeam.getDefeatedUnits();
@@ -148,7 +176,7 @@ export class GameResolver {
       let defeatedString = "";
       right.forEach((unit) => (defeatedString += unit.name + ", "));
 
-      this.events.push(`Right team has defeated units: ${defeatedString}`);
+      this.log.push(`Right team has defeated units: ${defeatedString}`);
     }
 
     this.leftTeam.destroyDefeatedUnits();
@@ -156,11 +184,20 @@ export class GameResolver {
   }
 
   private getWinningTeam(): SlimGameTeam | undefined {
-    if (!this.leftTeam.units.length) {
+    const leftDead = this.leftTeam.units.length === 0;
+    const rightDead = this.rightTeam.units.length === 0;
+
+    // Draw?
+    if (leftDead && rightDead) {
+      console.log("draw - need to account for this");
+      return undefined;
+    }
+
+    if (leftDead) {
       return this.rightTeam;
     }
 
-    if (!this.rightTeam.units.length) {
+    if (rightDead) {
       return this.leftTeam;
     }
 
@@ -168,14 +205,15 @@ export class GameResolver {
   }
 
   private gameOver(winningTeam: SlimGameTeam) {
-    this.events.push(`Game over! ${winningTeam.name} has won!`);
+    this.log.push(`Game over! ${winningTeam.name} has won!`);
 
     // Print out the game events
-    this.events.forEach((event) => console.log(event));
+    this.log.forEach((event) => console.log(event));
 
     this.onGameOver({
       leftTeam: this.leftTeam.builtTeam,
       rightTeam: this.rightTeam.builtTeam,
+      log: this.log,
       events: this.events,
     });
   }

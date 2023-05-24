@@ -10,25 +10,29 @@ export class BuiltTeam {
   constructor(public name: string, public units: BuiltUnit[]) {}
 }
 
+export type TeamSide = "left" | "right";
+
 // A team used by the game resolver
 export class SlimGameTeam {
   name: string;
   units: SlimGameUnit[];
 
-  constructor(public builtTeam: BuiltTeam, public rightSide = false) {
+  constructor(public builtTeam: BuiltTeam, public side: TeamSide) {
     this.name = builtTeam.name;
 
     // Setup game units for this team
     const units = builtTeam.units.map(
-      (builtUnit) => new SlimGameUnit(builtUnit)
+      (builtUnit) => new SlimGameUnit(builtUnit, side)
     );
 
     // Flip units on right side, as all teams are built for the left
-    this.units = rightSide ? units.reverse() : units;
+    this.units = side === "right" ? units.reverse() : units;
   }
 
   getActiveUnit() {
-    return this.rightSide ? this.units[0] : this.units[this.units.length - 1];
+    return this.side === "right"
+      ? this.units[0]
+      : this.units[this.units.length - 1];
   }
 
   getDefeatedUnits() {
